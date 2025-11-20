@@ -27,10 +27,6 @@
     <PackageReference Include="Serilog.Sinks.Console" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.CommandLine.NamingConventionBinder" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Fhi.HelseId.Selvbetjening\Fhi.HelseIdSelvbetjening.csproj" />
   </ItemGroup>  
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="" />
