@@ -24,8 +24,8 @@
     <PackageReference Include="System.CommandLine.NamingConventionBinder" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Fhi.HelseId\Fhi.HelseId.Selvbetjening\Fhi.HelseIdSelvbetjening.csproj" />
-    <ProjectReference Include="..\..\src\Fhi.HelseId\Fhi.HelseIdSelvbetjening.CLI\Fhi.HelseIdSelvbetjening.CLI.csproj" />
+    <ProjectReference Include="..\..\..\src\Fhi.HelseId\Fhi.HelseId.Selvbetjening\Fhi.HelseIdSelvbetjening.csproj" />
+    <ProjectReference Include="..\..\..\src\Fhi.HelseId\Fhi.HelseIdSelvbetjening.CLI\Fhi.HelseIdSelvbetjening.CLI.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="NUnit.Framework" />
