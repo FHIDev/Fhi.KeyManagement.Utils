@@ -17,6 +17,7 @@
     <PackageReference Include="System.CommandLine.NamingConventionBinder" />
   </ItemGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Fhi.HelseIdSelvbetjening.CLI" />
     <InternalsVisibleTo Include="Fhi.HelseIdSelvbetjening.CLI.Tests" />
     <InternalsVisibleTo Include="Fhi.HelseIdSelvbetjening.UnitTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
