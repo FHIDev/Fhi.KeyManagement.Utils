@@ -10,9 +10,9 @@ namespace Fhi.Security.Cryptography.UnitTests
         /// Generate JWK with default parameters and validate key structure.
         /// </summary>
         [Test]
-        public void GIVEN_GenerateRsaJwk_WHEN_OnlyDefaultValues_THEN_CreateValidKeyPair()
+        public void GIVEN_CreateRsaJwk_WHEN_OnlyDefaultValues_THEN_CreateValidKeyPair()
         {
-            var keys = JwkGenerator.GenerateRsaJwk();
+            var keys = JwkGenerator.CreateRsaJwk();
 
             var publicJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PublicKey);
             var privateJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PrivateKey);
@@ -34,10 +34,10 @@ namespace Fhi.Security.Cryptography.UnitTests
         /// Generate JWK with custom kid and verify it is applied.
         /// </summary>
         [Test]
-        public void GIVEN_GenerateRsaJwk_WHEN_CustomKidValue_THEN_CreateValidKeyPairWithCustomKid()
+        public void GIVEN_CreateRsaJwk_WHEN_CustomKidValue_THEN_CreateValidKeyPairWithCustomKid()
         {
             var customKid = "custom-key-id";
-            var keys = JwkGenerator.GenerateRsaJwk(kid: customKid);
+            var keys = JwkGenerator.CreateRsaJwk(kid: customKid);
 
             var publicJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PublicKey);
             var privateJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PrivateKey);
@@ -53,11 +53,11 @@ namespace Fhi.Security.Cryptography.UnitTests
         /// Generate JWK with invalid key use and expect exception.
         /// </summary>
         [Test]
-        public void GIVEN_GenerateRsaJwk_WHEN_InvalidKeyUseType_THEN_ThrowException()
+        public void GIVEN_CreateRsaJwk_WHEN_InvalidKeyUseType_THEN_ThrowException()
         {
             var ex = Assert.Throws<ArgumentException>(() =>
             {
-                JwkGenerator.GenerateRsaJwk(keyUse: "invalid");
+                JwkGenerator.CreateRsaJwk(keyUse: "invalid");
             });
 
             Assert.That(ex.Message, Does.Contain("Invalid key use"), "Wrong or missing exception.");
@@ -67,11 +67,11 @@ namespace Fhi.Security.Cryptography.UnitTests
         /// Generate JWK with invalid signing algorithm and expect exception.
         /// </summary>
         [Test]
-        public void GIVEN_GenerateRsaJwk_WHEN_InvalidSigningAlgorithm_THEN_ThrowException()
+        public void GIVEN_CreateRsaJwk_WHEN_InvalidSigningAlgorithm_THEN_ThrowException()
         {
             var ex = Assert.Throws<ArgumentException>(() =>
             {
-                JwkGenerator.GenerateRsaJwk(signingAlgorithm: "none");
+                JwkGenerator.CreateRsaJwk(signingAlgorithm: "none");
             });
 
             Assert.That(ex.Message, Does.Contain("Invalid signing algorithm"), "Wrong or missing exception.");

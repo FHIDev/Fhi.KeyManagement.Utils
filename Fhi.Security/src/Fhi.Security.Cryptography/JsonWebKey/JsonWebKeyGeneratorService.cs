@@ -24,7 +24,7 @@ namespace Fhi.Security.Cryptography
         /// <param name="keyUse"></param>
         /// <param name="kid"></param>
         /// <returns></returns>
-        public static JwkKeyPair GenerateRsaJwk(
+        public static JwkKeyPair CreateRsaJwk(
             string signingAlgorithm = SecurityAlgorithms.RsaSha512,
             string keyUse = "sig",
             string? kid = null)
