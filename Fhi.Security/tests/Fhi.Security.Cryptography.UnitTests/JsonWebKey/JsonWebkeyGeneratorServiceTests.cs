@@ -12,7 +12,7 @@ namespace Fhi.Security.Cryptography.UnitTests
         [Test]
         public void GIVEN_CreateRsaJwk_WHEN_OnlyDefaultValues_THEN_CreateValidKeyPair()
         {
-            var keys = JwkGenerator.CreateRsaJwk();
+            var keys = JWK.Create();
 
             var publicJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PublicKey);
             var privateJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PrivateKey);
@@ -37,7 +37,7 @@ namespace Fhi.Security.Cryptography.UnitTests
         public void GIVEN_CreateRsaJwk_WHEN_CustomKidValue_THEN_CreateValidKeyPairWithCustomKid()
         {
             var customKid = "custom-key-id";
-            var keys = JwkGenerator.CreateRsaJwk(kid: customKid);
+            var keys = JWK.Create(kid: customKid);
 
             var publicJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PublicKey);
             var privateJwk = JsonSerializer.Deserialize<JsonWebKey>(keys.PrivateKey);
@@ -57,7 +57,7 @@ namespace Fhi.Security.Cryptography.UnitTests
         {
             var ex = Assert.Throws<ArgumentException>(() =>
             {
-                JwkGenerator.CreateRsaJwk(keyUse: "invalid");
+                JWK.Create(keyUse: "invalid");
             });
 
             Assert.That(ex.Message, Does.Contain("Invalid key use"), "Wrong or missing exception.");
@@ -71,7 +71,7 @@ namespace Fhi.Security.Cryptography.UnitTests
         {
             var ex = Assert.Throws<ArgumentException>(() =>
             {
-                JwkGenerator.CreateRsaJwk(signingAlgorithm: "none");
+                JWK.Create(signingAlgorithm: "none");
             });
 
             Assert.That(ex.Message, Does.Contain("Invalid signing algorithm"), "Wrong or missing exception.");

@@ -12,9 +12,30 @@ namespace Fhi.Security.Cryptography
     public record JwkKeyPair(string PublicKey, string PrivateKey);
 
     /// <summary>
+    /// Public class that exposes methods to generate Jwk
+    /// </summary>
+    public static class JWK
+    {
+        /// <summary>
+        /// Create a new JWK key pair.
+        /// </summary>
+        /// <param name="signingAlgorithm">Signing algorithm (default: RSA SHA-512)</param>
+        /// <param name="keyUse">Key use (default: "sig")</param>
+        /// <param name="kid">Optional key ID (default: computed thumbprint)</param>
+        /// <returns>A JwkKeyPair containing public and private JWK JSON</returns>
+        public static JwkKeyPair Create(
+            string signingAlgorithm = SecurityAlgorithms.RsaSha512,
+            string keyUse = "sig",
+            string? kid = null)
+        {
+            return JsonWebKeyGenerator.CreateRsaJwk(signingAlgorithm, keyUse, kid);
+        }
+    }
+
+    /// <summary>
     /// Generate Json Web Keys used for client assertion and DPoP
     /// </summary>
-    public static class JwkGenerator
+    internal static class JsonWebKeyGenerator
     {
         /// <summary>
         /// Generate a Json web key with RSA signing algorithm. Returns both private key and public key 
@@ -24,10 +45,10 @@ namespace Fhi.Security.Cryptography
         /// <param name="keyUse"></param>
         /// <param name="kid"></param>
         /// <returns></returns>
-        public static JwkKeyPair CreateRsaJwk(
-            string signingAlgorithm = SecurityAlgorithms.RsaSha512,
-            string keyUse = "sig",
-            string? kid = null)
+        internal static JwkKeyPair CreateRsaJwk(
+            string signingAlgorithm,
+            string keyUse,
+            string? kid)
         {
             var allowedAlgorithms = new[]
             {

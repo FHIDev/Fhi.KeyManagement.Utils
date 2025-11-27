@@ -6,7 +6,7 @@ namespace Microsoft.IdentityModel.Tokens
     /// <summary>
     /// Custom converter that serializes only the public JWK fields.
     /// </summary>
-    public class PublicJsonWebKeyConverter : JsonConverter<JsonWebKey>
+    class PublicJsonWebKeyConverter : JsonConverter<JsonWebKey>
     {
         /// <inheritdoc/>
         public override JsonWebKey? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

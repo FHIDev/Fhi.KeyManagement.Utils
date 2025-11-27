@@ -10,9 +10,6 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
 	</ItemGroup>
   <ItemGroup>
-		<InternalsVisibleTo Include="Fhi.Security.Cryptography.UnitTests" />
-	</ItemGroup>
-  <ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="/" />
 	</ItemGroup>
 </Project>
