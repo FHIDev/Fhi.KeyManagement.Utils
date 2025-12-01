@@ -1,4 +1,6 @@
 using Fhi.Security.Cryptography.CLI.Commands;
+using Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey;
+using Fhi.Security.Cryptography.CLI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,9 @@ namespace Fhi.Security.Cryptography.CLI
                 })
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddTransient<IFileHandler, FileHandler>();
+                    services.AddTransient<ICommandBuilder, GenerateJsonWebKeyCommandBuilder>();
+                    services.AddTransient<JsonWebKeyGeneratorHandler>();
                     services.AddTransient<ICommandBuilder, InvalidCommandBuilder>();
                     ConfigureServices(context, services);
                 })
