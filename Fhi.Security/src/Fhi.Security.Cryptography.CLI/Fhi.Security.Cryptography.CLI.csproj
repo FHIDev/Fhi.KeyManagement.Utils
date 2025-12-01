@@ -6,10 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-      <!-- .NET Tool Configuration -->
+    <!-- .NET Tool Configuration -->
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>fhi-cryptography</ToolCommandName>
-    <PackageOutputPath>./nupkg</PackageOutputPath>
     <Version>1.0.0</Version>
     <Description>Command line tool for cryptography generation and management by FHI.</Description>
     <PackageTags>cli;configuration;keyManagement;jwk;jsonwebkey;certificate;pem</PackageTags>
