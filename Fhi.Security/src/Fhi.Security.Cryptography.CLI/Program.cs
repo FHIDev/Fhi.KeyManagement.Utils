@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
-using Fhi.HelseIdSelvbetjening.CLI;
-using Fhi.HelseIdSelvbetjening.CLI.Commands;
+using Fhi.Security.Cryptography.CLI;
+using Fhi.Security.Cryptography.CLI.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -10,6 +10,11 @@ using Serilog;
 /// </summary>
 public partial class Program
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
     public static async Task<int> Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()

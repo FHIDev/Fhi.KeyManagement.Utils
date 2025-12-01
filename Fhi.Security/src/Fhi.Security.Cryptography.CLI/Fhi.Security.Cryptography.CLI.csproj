@@ -5,6 +5,16 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+      <!-- .NET Tool Configuration -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>fhi-security-tool</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <Version>1.0.0</Version>
+    <Description>Command line tool for cryptography generation and management by FHI.</Description>
+    <PackageTags>cli;configuration;keyManagement;jwk;jsonwebkey;certificate;pem</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
