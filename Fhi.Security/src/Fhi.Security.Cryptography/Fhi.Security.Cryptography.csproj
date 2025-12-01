@@ -12,4 +12,9 @@
   <ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="/" />
 	</ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Fhi.Security.Cryptography.CLI" />
+    <InternalsVisibleTo Include="Fhi.Security.Cryptography.CLI.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
 </Project>

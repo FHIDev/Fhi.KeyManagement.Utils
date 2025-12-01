@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "GenerateJsonWebkey": {
+      "commandName": "Project",
+      "commandLineArgs": "generatejsonwebkey --KeyFileNamePrefix newtooltest --KeyCustomKid customkidtest --KeyDirectory C:\\temp",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
