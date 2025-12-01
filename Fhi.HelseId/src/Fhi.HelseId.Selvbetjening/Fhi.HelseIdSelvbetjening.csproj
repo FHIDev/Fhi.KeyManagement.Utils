@@ -22,4 +22,7 @@
     <InternalsVisibleTo Include="Fhi.HelseIdSelvbetjening.UnitTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Fhi.Security\src\Fhi.Security.Cryptography\Fhi.Security.Cryptography.csproj" />
+  </ItemGroup>  
 </Project>

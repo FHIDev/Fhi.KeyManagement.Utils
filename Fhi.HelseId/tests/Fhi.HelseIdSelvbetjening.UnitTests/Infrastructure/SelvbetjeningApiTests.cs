@@ -1,8 +1,8 @@
-﻿using Fhi.Authentication.Tokens;
-using Fhi.HelseIdSelvbetjening.Infrastructure.Selvbetjening;
+﻿using Fhi.HelseIdSelvbetjening.Infrastructure.Selvbetjening;
 using Fhi.HelseIdSelvbetjening.UnitTests.Setup;
 using NSubstitute;
 using System.Net;
+using Fhi.Security.Cryptography;
 
 namespace Fhi.HelseIdSelvbetjening.UnitTests.Infrastructure
 {
@@ -27,7 +27,7 @@ namespace Fhi.HelseIdSelvbetjening.UnitTests.Infrastructure
             var selvbetjeningApi = new SelvbetjeningApi(factory);
             var (ClientSecrets, _) = await selvbetjeningApi.GetClientSecretsAsync(
                 "https://nhn.selvbetjening",
-                JwkGenerator.GenerateRsaJwk().PrivateKey,
+                JWK.Create().PrivateKey,
                 "accessToken");
 
             using (Assert.EnterMultipleScope())

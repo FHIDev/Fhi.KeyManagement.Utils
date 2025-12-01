@@ -1,12 +1,10 @@
 using System.Net;
 using System.Text.Json;
-using Fhi.Authentication.Tokens;
 using Fhi.HelseIdSelvbetjening.Business.Models;
-using Fhi.HelseIdSelvbetjening.Extensions;
 using Fhi.HelseIdSelvbetjening.Infrastructure;
 using Fhi.HelseIdSelvbetjening.Infrastructure.Selvbetjening;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Fhi.Security.Cryptography;
 using static Fhi.HelseIdSelvbetjening.Business.Models.ErrorResult;
 
 namespace Fhi.HelseIdSelvbetjening.Business
@@ -141,7 +139,7 @@ namespace Fhi.HelseIdSelvbetjening.Business
 
         private static string CreateDPoPKey()
         {
-            var key = JwkGenerator.GenerateRsaJwk();
+            var key = JWK.Create();
             return key.PrivateKey;
         }
 
