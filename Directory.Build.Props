@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Folkehelseinstituttet (FHI)</Authors>
+    <Copyright>Copyright 2025 Folkehelseinstituttet (FHI)</Copyright>
+    <Company>Folkehelseinstituttet</Company>
+    <PackageIcon>fhi.png</PackageIcon>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RepositoryUrl>https://github.com/FHIDev/Fhi.KeyManagement.Utils</RepositoryUrl>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)fhi.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+  </Project>
+  
