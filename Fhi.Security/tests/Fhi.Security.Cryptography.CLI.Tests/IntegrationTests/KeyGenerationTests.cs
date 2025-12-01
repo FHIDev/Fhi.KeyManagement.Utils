@@ -2,7 +2,6 @@ using Fhi.Security.Cryptography.CLI.IntegrationTests.Setup;
 using Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;
-using System.CommandLine;
 
 namespace Fhi.Security.Cryptography.CLI.IntegrationTests
 {
