@@ -1,5 +1,4 @@
-﻿using Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateJsonWebKey;
-using Fhi.HelseIdSelvbetjening.CLI.Commands.ReadClientSecretExpiration;
+﻿using Fhi.HelseIdSelvbetjening.CLI.Commands.ReadClientSecretExpiration;
 using Fhi.HelseIdSelvbetjening.CLI.Commands.UpdateClientKey;
 
 namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
@@ -30,10 +29,10 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
 
             var keyDirectory = Path.Combine(Environment.CurrentDirectory, "TestData");
             var keyPrefix = "manualtest";
-            int exitCodeGenerateJsonWebKeys = await Program.Main([
-                GenerateJsonWebKeyParameterNames.CommandName,
-                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", keyPrefix,
-                $"--{GenerateJsonWebKeyParameterNames.KeyDirectory.Long}", keyDirectory
+            int exitCodeGenerateJsonWebKeys = await Security.Cryptography.CLI.Program.Main([
+                "generatejsonwebkey",
+                $"--KeyFileNamePrefix", keyPrefix,
+                $"--KeyDirectory", keyDirectory
             ]);
 
             var output = stringWriter.ToString();

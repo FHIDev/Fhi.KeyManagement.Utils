@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Fhi.Security\src\Fhi.Security.Cryptography.CLI\Fhi.Security.Cryptography.CLI.csproj" />
     <ProjectReference Include="..\..\src\Fhi.HelseIdSelvbetjening.CLI\Fhi.HelseIdSelvbetjening.CLI.csproj" />
     <ProjectReference Include="..\Fhi.HelseIdSelvbetjening.UnitTests\Fhi.HelseIdSelvbetjening.UnitTests.csproj" />
   </ItemGroup>
