@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,5 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Fhi.Security\src\Fhi.Security.Cryptography\Fhi.Security.Cryptography.csproj" />
-  </ItemGroup>  
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>
