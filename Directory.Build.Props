@@ -4,6 +4,7 @@
     <Copyright>Copyright 2025 Folkehelseinstituttet (FHI)</Copyright>
     <Company>Folkehelseinstituttet</Company>
     <PackageIcon>fhi.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryUrl>https://github.com/FHIDev/Fhi.KeyManagement.Utils</RepositoryUrl>
     <PackageOutputPath>./nupkg</PackageOutputPath>
@@ -13,7 +14,7 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)fhi.png" Pack="true" PackagePath="/" />
+    <None Include="fhi.png" Pack="true" PackagePath="/" />
   </ItemGroup>
   </Project>
   

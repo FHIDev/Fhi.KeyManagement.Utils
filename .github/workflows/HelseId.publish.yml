@@ -1,6 +1,6 @@
-name: Publish Cryptography NuGet Package
+name: Publish HelseId NuGet Package
 description: |
-  This workflow packs and publishes the NuGet package for the Fhi.Security.Cryptography project
+  This workflow packs and publishes the NuGet package for the Fhi.HelseIdSelvbetjening project
   when a manually run.
 
 on:
@@ -34,7 +34,7 @@ jobs:
     - name: Set version and tag variables
       run: |
         echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
-        echo "TAG=Fhi.Security.Cryptography-${{ github.event.inputs.version }}" >> $GITHUB_ENV
+        echo "TAG=Fhi.HelseIdSelvbetjening-${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
     - name: Create git tag
       run: |
@@ -45,7 +45,7 @@ jobs:
 
     - name: Pack NuGet package
       run: |
-        dotnet pack ./Fhi.Security/src/Fhi.Security.Cryptography/Fhi.Security.Cryptography.csproj \
+        dotnet pack ./Fhi.HelseId/src/Fhi.HelseIdSelvbetjening/Fhi.HelseIdSelvbetjening.csproj \
         --configuration Release \
         -p:PackageVersion=${{ env.VERSION }} \
         --output nuget-packages
@@ -64,11 +64,9 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ env.TAG }}
-        name: Release Fhi.Security.Cryptography ${{ env.VERSION }}
+        name: Release Fhi.HelseIdSelvbetjening ${{ env.VERSION }}
         draft: true
         prerelease: github.event.inputs.prerelease
         files: nuget-packages/*.nupkg
         body: |
-          **NuGet Package**: [Fhi.Security.Cryptography](https://www.nuget.org/packages/Fhi.Security.Cryptography/${{ env.VERSION }})
-
-  
+          **NuGet Package**: [Fhi.HelseIdSelvbetjening](https://www.nuget.org/packages/Fhi.HelseIdSelvbetjening/${{ env.VERSION }})
