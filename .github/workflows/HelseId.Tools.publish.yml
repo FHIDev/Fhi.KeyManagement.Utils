@@ -1,4 +1,4 @@
-name: Publish NuGet Package
+name: Publish HelseId Tool NuGet Package
 description: |
   This workflow packs and publishes the NuGet package for the Fhi.HelseIdSelvbetjening.CLI project
   when a manually run.

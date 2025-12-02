@@ -1,4 +1,4 @@
-name: Publish NuGet Package
+name: Publish Cryptography NuGet Package
 description: |
   This workflow packs and publishes the NuGet package for the Fhi.Security.Cryptography project
   when a manually run.
