@@ -16,6 +16,7 @@
     <PackageTags>helseid;cli;configuration;keyManagement</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>fhi.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,5 +35,7 @@
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
-
+    <ItemGroup>
+    <None Include="../../../fhi.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>

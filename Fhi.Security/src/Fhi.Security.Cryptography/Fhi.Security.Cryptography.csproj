@@ -4,6 +4,8 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>fhi.png</PackageIcon>
     <PackageTags>keyManagement;jwk;jsonwebkey;certificate;pem</PackageTags>
   </PropertyGroup>
   	<ItemGroup>
@@ -11,14 +13,14 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
 	</ItemGroup>
   <ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="/" />
+		<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Fhi.Security.Cryptography.CLI" />
     <InternalsVisibleTo Include="Fhi.Security.Cryptography.CLI.Tests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="" />
+    <ItemGroup>
+    <None Include="../../../fhi.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

@@ -9,6 +9,8 @@
     <!-- .NET Tool Configuration -->
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>fhi-cryptography</ToolCommandName>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>fhi.png</PackageIcon>
     <Version>1.0.0</Version>
     <Description>Command line tool for cryptography generation and management by FHI.</Description>
     <PackageTags>cli;configuration;keyManagement;jwk;jsonwebkey;certificate;pem</PackageTags>
@@ -30,6 +32,9 @@
   </ItemGroup>
     <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../fhi.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
