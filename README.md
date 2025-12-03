@@ -8,7 +8,7 @@ See [Documentation](https://fhidev.github.io/Fhi.KeyManagement.Utils/) for detai
 
 ## Contribution
 
-Read our [Code Of Conduct](https://github.com/FHIDev/Fhi.KeyManagement.Utils/blob/main/CODE_OF_CONDUCT.md) before contributing to our repository.
+Read our [Contribution Guide](https://github.com/FHIDev/Fhi.KeyManagement.Utils/blob/main/CONTRIBUTING.md) and [Code Of Conduct](https://github.com/FHIDev/Fhi.KeyManagement.Utils/blob/main/CODE_OF_CONDUCT.md) before contributing to our repository.
 
 ## License
 
