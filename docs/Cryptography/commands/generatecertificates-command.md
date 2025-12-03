@@ -21,4 +21,4 @@
 
 ## Code sample
 
-See code lab [Generate Certificates](../code-lab/generatecertificates.ipynb) 
+See code lab [Generate Certificates](../../HelseId/code-lab/generatecertificates.ipynb) 
