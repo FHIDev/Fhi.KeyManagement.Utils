@@ -1,18 +1,9 @@
-# HelseID CLI Tool
+# Key Management Tools and Packages
 
-Developer and operations tools to work with HelseID clients and registrations for FHI
+Developer and operations tools to work with HelseID and Maskinporten clients and registrations for FHI
 
 ## Usage
 
-See [Documentation](https://fhidev.github.io/Fhi.HelseId.Tools/)
-
-### Client secret tool
-[Client secret tool](./ClientSecret/overview.md)
-
-![](./SecretUpdaterCLI.jpg)
-
-
-Command line tool for HelseID client configuration and key management.
-
+See [Documentation](https://fhidev.github.io/Fhi.KeyManagement.Utils/)
 
 
