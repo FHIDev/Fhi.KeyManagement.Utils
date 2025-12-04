@@ -6,7 +6,7 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Readclientsecret - FHI HelseID Tools</title>
+<title>Update client secret command - FHI HelseID Tools</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
@@ -14,8 +14,8 @@
 <link href="../../../overrides/cards.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Readclientsecret";
-        var mkdocs_page_input_path = "ClientSecret/code-lab/readclientsecret.ipynb";
+        var mkdocs_page_name = "Update client secret command";
+        var mkdocs_page_input_path = "HelseId/code-lab/updateclientsecret.ipynb";
         var mkdocs_page_url = null;
       </script>
 <!--[if lt IE 9]>
@@ -42,9 +42,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">ClientSecret</span></p>
+<p class="caption"><span class="caption-text">Cryptography</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Cryptography/command-overview/">Cryptography Tool (Jwk)</a>
+</li>
+<li class="toctree-l1"><a class="reference internal">Commands</a>
+<ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../Cryptography/commands/generate-json-web-key-command/">Generate new Json Web keys Commands</a>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Cryptography/commands/generatecertificates-command/">Generate keys in certificate format Commands</a>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">HelseId</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../command-overview/">About HelseId Client secrets (Jwk)</a>
+<li class="toctree-l1"><a class="reference internal" href="../../command-overview/">HelseId Client secrets Tool</a>
 </li>
 <li class="toctree-l1 current"><a class="reference internal current">Code lab</a>
 <ul class="current">
@@ -54,19 +67,17 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../generatenewjsonwebkeys/">Generate new Json Web keys command</a>
 </li>
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Readclientsecret</a>
+<li class="toctree-l2"><a class="reference internal" href="../readclientsecret/">Readclientsecret</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../updateclientsecret/">Update client secret command</a>
+<li class="toctree-l2 current"><a class="reference internal current" href="#">Update client secret command</a>
+<ul class="current">
+</ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal">Commands</a>
 <ul>
 <li class="toctree-l2"><a class="reference internal" href="../../commands/client-secret-update-commands/">Update client with new keys Commands</a>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../commands/generate-json-web-key-command/">Generate new Json Web keys Commands</a>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../commands/generatecertificates-command/">Generate keys in certificate format Commands</a>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../commands/read-client-secret-expiration-command/">Read client secret expiration command</a>
 </li>
@@ -85,9 +96,9 @@
 <div class="rst-content"><div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
-<li class="breadcrumb-item">ClientSecret</li>
+<li class="breadcrumb-item">HelseId</li>
 <li class="breadcrumb-item">Code lab</li>
-<li class="breadcrumb-item active">Readclientsecret</li>
+<li class="breadcrumb-item active">Update client secret command</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -531,8 +542,18 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 <!-- End of mermaid configuration --><div class="jupyter-wrapper">
 <div class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=63206bd0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=62849c1e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="update-client-secret-command">Update client secret command<a class="anchor-link" href="#update-client-secret-command">¶</a></h1>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5ffced0c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -550,50 +571,25 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="c"># Read client secret command</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-1"># Read client secret command</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=ce6ad0c8">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-2">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
 <div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="n">dotnet</span> <span class="n">tool</span> <span class="n">install</span> <span class="p">-</span><span class="n">-global</span> <span class="n">Fhi</span><span class="p">.</span><span class="n">HelseIdSelvbetjening</span><span class="p">.</span><span class="nb">CLI </span><span class="p">-</span><span class="n">-version</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span>
 
 <span class="nv">$clientId</span> <span class="p">=</span> <span class="s2">""</span>
-<span class="nv">$privateJwkPath</span> <span class="p">=</span> <span class="s2">""</span>
+<span class="nv">$newKeyPath</span> <span class="p">=</span> <span class="s2">""</span>
+<span class="nv">$oldKeyPath</span> <span class="p">=</span><span class="s2">""</span>
 <span class="nv">$authorityUrl</span> <span class="p">=</span> <span class="s2">""</span>
 <span class="nv">$baseAddress</span> <span class="p">=</span> <span class="s2">""</span>
 
-<span class="n">helseid-cli</span> <span class="n">readclientsecretexpiration</span> <span class="p">-</span><span class="n">-ClientId</span> <span class="nv">$clientId</span> <span class="p">-</span><span class="n">-ExistingPrivateJwkPath</span> <span class="nv">$privateJwkPath</span> <span class="p">-</span><span class="n">-AuthorityUrl</span> <span class="nv">$authorityUrl</span> <span class="p">-</span><span class="n">-BaseAddress</span> <span class="nv">$baseAddress</span>
+<span class="n">helseid-cli</span> <span class="n">updateclientkey</span> <span class="p">-</span><span class="n">-ClientId</span> <span class="nv">$clientId</span> <span class="p">-</span><span class="n">-NewPublicJwkPath</span> <span class="nv">$newKeyPath</span> <span class="p">-</span><span class="n">-ExistingPrivateJwkPath</span> <span class="nv">$oldKeyPath</span> <span class="p">-</span><span class="n">-AuthorityUrl</span> <span class="nv">$authorityUrl</span> <span class="p">-</span><span class="n">-BaseAddress</span> <span class="nv">$baseAddress</span> <span class="p">-</span><span class="n">-Yes</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2">dotnet tool install --global Fhi.HelseIdSelvbetjening.CLI --version 1.0.0
+<div class="clipboard-copy-txt" id="cell-1">dotnet tool install --global Fhi.HelseIdSelvbetjening.CLI --version 1.0.0
 
 $clientId = ""
-$privateJwkPath = ""
+$newKeyPath = ""
+$oldKeyPath =""
 $authorityUrl = ""
 $baseAddress = ""
 
-helseid-cli readclientsecretexpiration --ClientId $clientId --ExistingPrivateJwkPath $privateJwkPath --AuthorityUrl $authorityUrl --BaseAddress $baseAddress</div>
+helseid-cli updateclientkey --ClientId $clientId --NewPublicJwkPath $newKeyPath --ExistingPrivateJwkPath $oldKeyPath --AuthorityUrl $authorityUrl --BaseAddress $baseAddress --Yes</div>
 </div>
 </div>
 </div>
@@ -608,8 +604,8 @@ helseid-cli readclientsecretexpiration --ClientId $clientId --ExistingPrivateJwk
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-left" href="../generatenewjsonwebkeys/" title="Generate new Json Web keys command"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-<a class="btn btn-neutral float-right" href="../updateclientsecret/" title="Update client secret command">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral float-left" href="../readclientsecret/" title="Readclientsecret"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral float-right" href="../../commands/client-secret-update-commands/" title="Update client with new keys Commands">Next <span class="icon icon-circle-arrow-right"></span></a>
 </div>
 <hr/>
 <div role="contentinfo">
@@ -624,8 +620,8 @@ helseid-cli readclientsecretexpiration --ClientId $clientId --ExistingPrivateJwk
 </div>
 <div aria-label="Versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../generatenewjsonwebkeys/" style="color: #fcfcfc">« Previous</a></span>
-<span><a href="../updateclientsecret/" style="color: #fcfcfc">Next »</a></span>
+<span><a href="../readclientsecret/" style="color: #fcfcfc">« Previous</a></span>
+<span><a href="../../commands/client-secret-update-commands/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script src="../../../js/jquery-3.6.0.min.js"></script>
