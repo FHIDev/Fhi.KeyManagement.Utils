@@ -73,7 +73,7 @@ namespace Fhi.HelseIdSelvbetjening.Extensions
                 // the SHA-256 [SHS] hash of the ASCII encoding of the associated access token's value.
                 using var sha256 = SHA256.Create();
                 var hash = sha256.ComputeHash(Encoding.ASCII.GetBytes(accessToken));
-                var ath = Base64Url.Encode(hash);
+                var ath = Base64UrlEncoder.Encode(hash);
 
                 payload[JwtClaimTypes.DPoPAccessTokenHash] = ath;
             }
