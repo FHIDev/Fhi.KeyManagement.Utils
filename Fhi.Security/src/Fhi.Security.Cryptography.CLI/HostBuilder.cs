@@ -30,7 +30,6 @@ namespace Fhi.Security.Cryptography.CLI
                     services.AddTransient<IFileHandler, FileHandler>();
                     services.AddTransient<ICommandBuilder, GenerateJsonWebKeyCommandBuilder>();
                     services.AddTransient<JsonWebKeyGeneratorHandler>();
-                    services.AddTransient<ICommandBuilder, InvalidCommandBuilder>();
                     ConfigureServices(context, services);
                 })
                 .Build();
