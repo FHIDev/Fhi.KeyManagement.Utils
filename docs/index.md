@@ -11,7 +11,7 @@ Developer and operations tools to work with HelseID clients and registrations fo
   <div class="card">
     <h3>Cryptography command tool</h3>
     <p>Generate JsonWebKeys and Certificates compatible with Fhi-supported OpenId Connect Providers</p>
-    <a href="./Crytpography/command-overview">Getting started →</a>
+    <a href="./Cryptography/command-overview">Getting started →</a>
   </div>
   <div class="card">
     <h3>Code lab - Sample code for bash and powershell</h3>
