@@ -13,11 +13,4 @@ Developer and operations tools to work with HelseID clients and registrations fo
     <p>Generate JsonWebKeys and Certificates compatible with Fhi-supported OpenId Connect Providers</p>
     <a href="./Crytpography/command-overview">Getting started →</a>
   </div>
-  <div class="card">
-    <h3>Code lab - Sample code for bash and powershell</h3>
-    <p>
-    Run sample code from documentation directly with .NET Interactive or Jupyter lab
-    <a href="./HelseId/code-lab/about-codelab">Code lab →</a>
-    </p>
-  </div>
 </div>

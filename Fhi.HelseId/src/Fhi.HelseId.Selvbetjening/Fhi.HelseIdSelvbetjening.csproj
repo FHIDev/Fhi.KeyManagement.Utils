@@ -4,8 +4,6 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>fhi.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,11 +22,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Fhi.Security\src\Fhi.Security.Cryptography\Fhi.Security.Cryptography.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="../../../fhi.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

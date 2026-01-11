@@ -38,4 +38,10 @@
     <ItemGroup>
     <None Include="../../../fhi.png" Pack="true" PackagePath="" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo  Include="EndToEndTests" />
+    <InternalsVisibleTo Include="Fhi.HelseIdSelvbetjening.CLI.Tests"/>
+    <InternalsVisibleTo Include="Fhi.HelseIdSelvbetjening.UnitTests"/>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+  </ItemGroup>
 </Project>

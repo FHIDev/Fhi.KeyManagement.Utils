@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\Directory.Test.Props" />
+  <PropertyGroup>
+    <TargetFramework>net9</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit.Analyzers" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Fhi.HelseId\src\Fhi.HelseIdSelvbetjening.CLI\Fhi.HelseIdSelvbetjening.CLI.csproj" />
+    <ProjectReference Include="..\..\Fhi.Security\src\Fhi.Security.Cryptography.CLI\Fhi.Security.Cryptography.CLI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+</Project>

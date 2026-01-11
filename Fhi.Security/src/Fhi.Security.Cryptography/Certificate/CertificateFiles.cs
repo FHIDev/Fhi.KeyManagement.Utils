@@ -1,4 +1,4 @@
-namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate;
+namespace Fhi.Security.Cryptography.Certificate;
 
 public class CertificateFiles
 {

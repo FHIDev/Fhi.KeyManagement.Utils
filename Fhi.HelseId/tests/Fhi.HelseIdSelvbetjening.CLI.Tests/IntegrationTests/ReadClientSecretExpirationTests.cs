@@ -6,8 +6,6 @@ using Fhi.HelseIdSelvbetjening.Infrastructure.Selvbetjening.Dtos;
 using Fhi.HelseIdSelvbetjening.UnitTests.Setup;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;
-using System.CommandLine;
-using System.CommandLine.Parsing;
 
 namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
 {

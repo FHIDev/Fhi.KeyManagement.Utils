@@ -5,6 +5,12 @@ Client Secret Tool is a console application that facilitates the secure rotation
 - **Update client keys in HelseID client configuration:** Command for updating secrets (public key) on a HelseID client. See [overview of update client secret commands](./commands/client-secret-update-commands.md)
 - **Read client secret expiration:** Command for reading the expiration date of client secrets to enable automated monitoring and renewal scheduling. See [overview of read client secret expiration commands](./commands/read-client-secret-expiration-command.md)
 
+## Authentication 
+The Client Secret Tool authenticates with Helse ID using the uses the client's existing private JWK (JSON Web Key) and client ID to verify its identity to get an access token.
+
+
+## Updating client secret flow
+
 The image below illustrates the steps for updating a client keys (secrets)
 
 ![Client Secret Management](./ClientSecretManagement.jpg)

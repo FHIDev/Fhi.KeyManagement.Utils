@@ -7,7 +7,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
     /// Manual acceptance tests for the CLI. These tests should be run against test environment.
     /// </summary>
     [TestFixture, Explicit]
-    public class AcceptanceTests
+    public class SecretFlow
     {
         /// <summary>
         /// In order to run this test:

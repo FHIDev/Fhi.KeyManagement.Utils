@@ -1,7 +1,7 @@
-using System.CommandLine;
-using System.CommandLine.NamingConventionBinder;
-using Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions;
+using Fhi.Security.Cryptography.CLI.Commands;
+using Fhi.Security.Cryptography.CLI.Commands.Extensions;
 using Microsoft.Extensions.Hosting;
+using System.CommandLine;
 
 namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
 {
@@ -35,7 +35,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
                 GenerateCertificateParameterNames.CertificateDirectory.Short,
                 "Directory to store the generated certificates",
                 isRequired: false);
-            
+
             generateCertCommand.SetAction((ParseResult parseResult) =>
             {
                 var certificateCommonName = parseResult.GetValue(certificateCommonNameOption);
@@ -53,7 +53,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
                 _commandHandler.Execute(parameters);
                 return Task.FromResult(0);
             });
-            
+
             return generateCertCommand;
         }
     }

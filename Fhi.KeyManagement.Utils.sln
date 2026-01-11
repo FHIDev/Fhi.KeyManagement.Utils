@@ -1,22 +1,17 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11222.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{BA5A1542-0A32-41A2-8EE1-4647B1DA53B3}"
-	ProjectSection(SolutionItems) = preProject
-		samples\generate-keys.ps1 = samples\generate-keys.ps1
-		samples\generate-keys.sh = samples\generate-keys.sh
-		samples\update-clientsecret.ps1 = samples\update-clientsecret.ps1
-		samples\update-clientsecret.sh = samples\update-clientsecret.sh
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B31D3BB4-71ED-4EF0-9D3D-F7BC774FDD2D}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.Props = Directory.Build.Props
 		Directory.Packages.props = Directory.Packages.props
+		Directory.Test.props = Directory.Test.props
 		global.json = global.json
 		.github\workflows\HelseId.Tools.CI.yml = .github\workflows\HelseId.Tools.CI.yml
 		.github\workflows\HelseId.Tools.Documentation.yml = .github\workflows\HelseId.Tools.Documentation.yml
 		.github\workflows\HelseId.Tools.publish.yml = .github\workflows\HelseId.Tools.publish.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fhi.HelseId", "Fhi.HelseId", "{EA05B801-37F8-49A7-8721-CC8C75F415CF}"
@@ -46,6 +41,22 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.Security.Cryptography.CLI", "Fhi.Security\src\Fhi.Security.Cryptography.CLI\Fhi.Security.Cryptography.CLI.csproj", "{1D543554-C0D2-B0A7-7908-F49DC5E24896}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.Security.Cryptography.CLI.Tests", "Fhi.Security\tests\Fhi.Security.Cryptography.CLI.Tests\Fhi.Security.Cryptography.CLI.Tests.csproj", "{73F50D6D-E5EF-4E94-8F38-C3D889D5636D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{8A8D46A8-4658-4924-89E8-65EFE2776A1E}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.Security\samples\generate-keys.ps1 = Fhi.Security\samples\generate-keys.ps1
+		Fhi.Security\samples\generateKey.ps1 = Fhi.Security\samples\generateKey.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{FAA7B46A-BF17-4948-9E2F-60A53C3654D6}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.HelseId\samples\update-clientsecret.ps1 = Fhi.HelseId\samples\update-clientsecret.ps1
+		Fhi.HelseId\samples\update-clientsecret.sh = Fhi.HelseId\samples\update-clientsecret.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EndToEndTests", "EndToEndTests", "{2C0E3283-E04C-4F66-AB77-7F2526B195D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndToEndTests", "EndToEndTests\EndToEndTests\EndToEndTests.csproj", "{EF7C10D0-578A-4E20-A67B-BB02634D6E7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +96,10 @@ Global
 		{73F50D6D-E5EF-4E94-8F38-C3D889D5636D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73F50D6D-E5EF-4E94-8F38-C3D889D5636D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73F50D6D-E5EF-4E94-8F38-C3D889D5636D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF7C10D0-578A-4E20-A67B-BB02634D6E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF7C10D0-578A-4E20-A67B-BB02634D6E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF7C10D0-578A-4E20-A67B-BB02634D6E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF7C10D0-578A-4E20-A67B-BB02634D6E7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +117,9 @@ Global
 		{4A13FD0C-8C72-492B-8E10-D2992B596AD8} = {FEA26183-6803-46AB-8F31-1C02E5FB0BBA}
 		{1D543554-C0D2-B0A7-7908-F49DC5E24896} = {01985FAE-73E8-4269-B5F5-22D6CBF504DB}
 		{73F50D6D-E5EF-4E94-8F38-C3D889D5636D} = {FEA26183-6803-46AB-8F31-1C02E5FB0BBA}
+		{8A8D46A8-4658-4924-89E8-65EFE2776A1E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FAA7B46A-BF17-4948-9E2F-60A53C3654D6} = {EA05B801-37F8-49A7-8721-CC8C75F415CF}
+		{EF7C10D0-578A-4E20-A67B-BB02634D6E7E} = {2C0E3283-E04C-4F66-AB77-7F2526B195D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35A883FA-3874-441D-9EDB-53AC331556AB}
