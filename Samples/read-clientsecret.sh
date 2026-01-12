@@ -1,5 +1,7 @@
 #!/bin/bash
-# Capture exit code and output
+
+
+
 output=$(helseid-cli readclientsecretexpiration --ClientId "$CLIENT_ID" --ExistingPrivateJwkPath "$KEY_PATH" 2>&1 --AuthorityUrl "$AUTHORITY_URL" -BaseAddress "$BASE_ADDRESS")
 exit_code=$?
 

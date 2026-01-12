@@ -12,6 +12,5 @@ echo "ClientId: $ClientId"
 echo "NewKeyPath: $NewKeyPath"
 echo "ExisitingJwkPath: $ExisitingJwkPath"
 
-export DOTNET_ENVIRONMENT=Test
  "..\src\Fhi.HelseIdSelvbetjening.CLI\bin\Debug\net9.0\Fhi.HelseIdSelvbetjening.CLI.exe" updateclientkey --ClientId $ClientId --NewPublicJwkPath $NewKeyPath --ExistingPrivateJwkPath $ExisitingJwkPath  
 

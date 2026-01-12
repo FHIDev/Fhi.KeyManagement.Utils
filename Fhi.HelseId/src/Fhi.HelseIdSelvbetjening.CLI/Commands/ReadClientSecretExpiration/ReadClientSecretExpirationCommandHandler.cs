@@ -1,8 +1,8 @@
 using Fhi.HelseIdSelvbetjening.Business;
 using Fhi.HelseIdSelvbetjening.Business.Models;
+using Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions;
 using Fhi.HelseIdSelvbetjening.CLI.Services;
 using Microsoft.Extensions.Logging;
-using Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions;
 
 namespace Fhi.HelseIdSelvbetjening.CLI.Commands.ReadClientSecretExpiration
 {
@@ -35,12 +35,21 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.ReadClientSecretExpiration
                     return result.HandleResponse(
                         onSuccess: value =>
                         {
-                            if (value.SelectedSecret != null && value.SelectedSecret.ExpirationDate.HasValue)
+                            if (value.SelectedSecret != null)
                             {
-                                var epochTime = ((DateTimeOffset)value.SelectedSecret.ExpirationDate.Value).ToUnixTimeSeconds();
                                 _logger.LogDebug("Kid: {Kid}", value.SelectedSecret.KeyId);
-                                _logger.LogInformation("{EpochTime}", epochTime);
-                                return 0;
+                                if (value.SelectedSecret.ExpirationDate.HasValue)
+                                {
+                                    var epochTime = ((DateTimeOffset)value.SelectedSecret.ExpirationDate.Value).ToUnixTimeSeconds();
+                                    _logger.LogInformation("{EpochTime}", epochTime);
+                                    return 0;
+                                }
+                                else
+                                {
+                                    _logger.LogWarning("The client secret with Kid: {Kid} does not have an expiration date.", value.SelectedSecret.KeyId);
+                                    _logger.LogInformation("No expiration time (Null)");
+                                    return 0;
+                                }
                             }
 
                             _logger.LogError("No secret found with matching Kid.");

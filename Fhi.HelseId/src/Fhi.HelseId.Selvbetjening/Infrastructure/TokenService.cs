@@ -51,7 +51,7 @@ namespace Fhi.HelseIdSelvbetjening.Infrastructure
                 }
 
                 return response.IsError ?
-                    new TokenResponse(null, true, response.ErrorDescription) :
+                    new TokenResponse(null, true, string.Format("Error: {0}, ErrorDescription: {1}", response.Error, response.ErrorDescription)) :
                     new TokenResponse(response.AccessToken, false, string.Empty);
             }
 
