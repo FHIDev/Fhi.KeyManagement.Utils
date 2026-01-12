@@ -1,4 +1,4 @@
 <Project>
-	<Import Project="..\..\Directory.Src.props" />
+	<Import Project="../../Directory.Src.props" />
   </Project>
   
