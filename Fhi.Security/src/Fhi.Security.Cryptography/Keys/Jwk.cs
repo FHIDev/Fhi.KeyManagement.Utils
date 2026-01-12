@@ -1,6 +1,7 @@
+using Fhi.Security.Cryptography.Serialization;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text.Json;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Fhi.Security.Cryptography
 {
@@ -28,15 +29,9 @@ namespace Fhi.Security.Cryptography
             string keyUse = "sig",
             string? kid = null)
         {
-            return JsonWebKeyGenerator.CreateRsaJwk(signingAlgorithm, keyUse, kid);
+            return CreateRsaJwk(signingAlgorithm, keyUse, kid);
         }
-    }
 
-    /// <summary>
-    /// Generate Json Web Keys used for client assertion and DPoP
-    /// </summary>
-    internal static class JsonWebKeyGenerator
-    {
         /// <summary>
         /// Generate a Json web key with RSA signing algorithm. Returns both private key and public key 
         /// Following key requirement https://utviklerportal.nhn.no/informasjonstjenester/helseid/protokoller-og-sikkerhetsprofil/sikkerhetsprofil/docs/vedlegg/krav_til_kryptografi_enmd
@@ -45,7 +40,7 @@ namespace Fhi.Security.Cryptography
         /// <param name="keyUse"></param>
         /// <param name="kid"></param>
         /// <returns></returns>
-        internal static JwkKeyPair CreateRsaJwk(
+        private static JwkKeyPair CreateRsaJwk(
             string signingAlgorithm,
             string keyUse,
             string? kid)
@@ -71,6 +66,7 @@ namespace Fhi.Security.Cryptography
             using var rsa = RSA.Create(4096);
             var rsaParameters = rsa.ExportParameters(true);
 
+            // Fully qualify JsonWebKey to avoid ambiguity with namespace
             var privateJwk = new JsonWebKey
             {
                 Alg = signingAlgorithm,

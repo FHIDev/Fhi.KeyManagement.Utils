@@ -1,3 +1,4 @@
+using Fhi.Security.Cryptography;
 using Fhi.Security.Cryptography.CLI.Services;
 using Microsoft.Extensions.Logging;
 
@@ -29,19 +30,19 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
                     _fileHandler.CreateDirectory(certPath);
                 }
 
-                //CertificateFiles certificateFiles = GenerateCertificates(parameters.CertificateCommonName, parameters.CertificatePassword);
+                var certificateFiles = Certificate.CreateAsymmetricKeyPair(parameters.CertificateCommonName, parameters.CertificatePassword);
 
-                //var privateCertPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_private.pfx");
-                //var publicCertPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_public.pem");
-                //var thumbprintPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_thumbprint.txt");
+                var privateCertPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_private.pfx");
+                var publicCertPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_public.pem");
+                var thumbprintPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_thumbprint.txt");
 
-                //_fileHandler.WriteAllBytes(privateCertPath, certificateFiles.CertificatePrivateKey);
-                //_fileHandler.WriteAllText(publicCertPath, certificateFiles.CertificatePublicKey);
-                //_fileHandler.WriteAllText(thumbprintPath, certificateFiles.CertificateThumbprint);
+                _fileHandler.WriteAllBytes(privateCertPath, certificateFiles.CertificatePrivateKey.ToArray());
+                _fileHandler.WriteAllText(publicCertPath, certificateFiles.CertificatePublicKey);
+                _fileHandler.WriteAllText(thumbprintPath, certificateFiles.CertificateThumbprint);
 
-                //_logger.LogInformation("Private certificate saved: {@Path}", privateCertPath);
-                //_logger.LogInformation("Public certificate saved: {@Path}", publicCertPath);
-                //_logger.LogInformation("Thumbprint saved: {@Path}", thumbprintPath);
+                _logger.LogInformation("Private certificate saved: {@Path}", privateCertPath);
+                _logger.LogInformation("Public certificate saved: {@Path}", publicCertPath);
+                _logger.LogInformation("Thumbprint saved: {@Path}", thumbprintPath);
             }
         }
     }

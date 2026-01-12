@@ -1,6 +1,6 @@
 namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
 {
-    public record UpdateGenerateCertificateOptionNames(string Long, string Short);
+    internal record UpdateGenerateCertificateOptionNames(string Long, string Short);
 
     internal static class GenerateCertificateParameterNames
     {

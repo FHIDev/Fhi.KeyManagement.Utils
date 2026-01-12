@@ -4,9 +4,9 @@ VisualStudioVersion = 18.3.11222.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B31D3BB4-71ED-4EF0-9D3D-F7BC774FDD2D}"
 	ProjectSection(SolutionItems) = preProject
-		Directory.Build.Props = Directory.Build.Props
 		Directory.Packages.props = Directory.Packages.props
 		Directory.Test.props = Directory.Test.props
+		Directory.Src.Props = Directory.Src.Props
 		global.json = global.json
 		.github\workflows\HelseId.Tools.CI.yml = .github\workflows\HelseId.Tools.CI.yml
 		.github\workflows\HelseId.Tools.Documentation.yml = .github\workflows\HelseId.Tools.Documentation.yml
@@ -17,8 +17,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fhi.HelseId", "Fhi.HelseId", "{EA05B801-37F8-49A7-8721-CC8C75F415CF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D4A6631E-D7D4-4AEA-BF8C-75046AC71D47}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.HelseId\src\Directory.Build.props = Fhi.HelseId\src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9252C91C-4CC8-4C69-A30C-BE3994DFEFEB}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.HelseId\tests\Directory.Build.props = Fhi.HelseId\tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.HelseIdSelvbetjening", "Fhi.HelseId\src\Fhi.HelseId.Selvbetjening\Fhi.HelseIdSelvbetjening.csproj", "{7E16E7B8-8C81-3C16-2D24-9BA1EEB81133}"
 EndProject
@@ -31,8 +37,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fhi.Security", "Fhi.Security", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{01985FAE-73E8-4269-B5F5-22D6CBF504DB}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.Security\src\Directory.Build.Props = Fhi.Security\src\Directory.Build.Props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FEA26183-6803-46AB-8F31-1C02E5FB0BBA}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.Security\tests\Directory.Build.props = Fhi.Security\tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.Security.Cryptography", "Fhi.Security\src\Fhi.Security.Cryptography\Fhi.Security.Cryptography.csproj", "{4D44BE12-D8D9-809E-9493-DF9116AF65BC}"
 EndProject

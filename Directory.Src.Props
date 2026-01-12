@@ -3,6 +3,7 @@
     <Authors>Folkehelseinstituttet (FHI)</Authors>
     <Copyright>Copyright 2025 Folkehelseinstituttet (FHI)</Copyright>
     <Company>Folkehelseinstituttet</Company>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   </Project>
