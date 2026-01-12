@@ -4,7 +4,6 @@ $jwk = '{\"alg\":\"PS512\",\"d\":\"xxx\", \"kid\":\"xxx\}'
 $authority = "https://helseid-sts.test.nhn.no"
 $baseAddress = "https://api.selvbetjening.test.nhn.no"
 
-# Pass API response directly without modification
 $result = & helseid-cli readclientsecretexpiration --ClientId $clientId --ExistingPrivateJwk $jwk --AuthorityUrl $authority --BaseAddress $baseAddress
 
 if ($LASTEXITCODE -eq 0) {
