@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36804.6
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B31D3BB4-71ED-4EF0-9D3D-F7BC774FDD2D}"
 	ProjectSection(SolutionItems) = preProject
@@ -57,10 +57,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{2C0E3283-E04C-4F66-AB77-7F2526B195D9}"
 	ProjectSection(SolutionItems) = preProject
 		Samples\read-clientsecret.ps1 = Samples\read-clientsecret.ps1
-		Samples\read-clientsecret.sh = Samples\read-clientsecret.sh
 		Samples\TestScript.md = Samples\TestScript.md
 		Samples\update-clientsecret.ps1 = Samples\update-clientsecret.ps1
-		Samples\update-clientsecret.sh = Samples\update-clientsecret.sh
 	EndProjectSection
 EndProject
 Global
