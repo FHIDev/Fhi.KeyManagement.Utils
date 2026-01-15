@@ -6,7 +6,7 @@
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../../img/favicon.ico" rel="shortcut icon"/>
-<title>Generate new Json Web keys command - FHI HelseID Tools</title>
+<title>Generate keys in certificate format Commands - FHI HelseID Tools</title>
 <link href="../../../css/theme.css" rel="stylesheet"/>
 <link href="../../../css/theme_extra.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet"/>
@@ -14,8 +14,8 @@
 <link href="../../../overrides/cards.css" rel="stylesheet"/>
 <script>
         // Current page data
-        var mkdocs_page_name = "Generate new Json Web keys command";
-        var mkdocs_page_input_path = "HelseId/code-lab/generatenewjsonwebkeys.ipynb";
+        var mkdocs_page_name = "Generate keys in certificate format Commands";
+        var mkdocs_page_input_path = "Cryptography/commands/generatecertificates.ipynb";
         var mkdocs_page_url = null;
       </script>
 <!--[if lt IE 9]>
@@ -43,43 +43,33 @@
 </li>
 </ul>
 <p class="caption"><span class="caption-text">Cryptography</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../Cryptography/command-overview/">Cryptography Tool (Jwk)</a>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../command-overview/">Cryptography Tool (Jwk)</a>
 </li>
-<li class="toctree-l1"><a class="reference internal">Commands</a>
-<ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../Cryptography/commands/generate-json-web-key-command/">Generate new Json Web keys Commands</a>
+<li class="toctree-l1 current"><a class="reference internal current">Commands</a>
+<ul class="current">
+<li class="toctree-l2 current"><a class="reference internal current" href="#">Generate keys in certificate format Commands</a>
+<ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="#command">Command</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../Cryptography/commands/generatecertificates-command/">Generate keys in certificate format Commands</a>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../generatenewjsonwebkeys/">Generate new Json Web keys Command</a>
 </li>
 </ul>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">HelseId</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../command-overview/">HelseId Client secrets Tool</a>
-</li>
-<li class="toctree-l1 current"><a class="reference internal current">Code lab</a>
-<ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../about-codelab/">Getting started with codelab</a>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../generatecertificates/">Generate new certificates command</a>
-</li>
-<li class="toctree-l2 current"><a class="reference internal current" href="#">Generate new Json Web keys command</a>
-<ul class="current">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../readclientsecret/">Readclientsecret</a>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../updateclientsecret/">Update client secret command</a>
-</li>
-</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../HelseId/command-overview/">HelseId Client secrets Tool</a>
 </li>
 <li class="toctree-l1"><a class="reference internal">Commands</a>
 <ul>
-<li class="toctree-l2"><a class="reference internal" href="../../commands/client-secret-update-commands/">Update client with new keys Commands</a>
+<li class="toctree-l2"><a class="reference internal" href="../../../HelseId/commands/readclientsecret/">Read client secret command</a>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../commands/read-client-secret-expiration-command/">Read client secret expiration command</a>
+<li class="toctree-l2"><a class="reference internal" href="../../../HelseId/commands/updateclientsecret/">Update client secret command</a>
 </li>
 </ul>
 </li>
@@ -96,9 +86,9 @@
 <div class="rst-content"><div aria-label="breadcrumbs navigation" role="navigation">
 <ul class="wy-breadcrumbs">
 <li><a aria-label="Docs" class="icon icon-home" href="../../.."></a></li>
-<li class="breadcrumb-item">HelseId</li>
-<li class="breadcrumb-item">Code lab</li>
-<li class="breadcrumb-item active">Generate new Json Web keys command</li>
+<li class="breadcrumb-item">Cryptography</li>
+<li class="breadcrumb-item">Commands</li>
+<li class="breadcrumb-item active">Generate keys in certificate format Commands</li>
 <li class="wy-breadcrumbs-aside">
 </li>
 </ul>
@@ -548,12 +538,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="generate-new-json-web-keys-command">Generate new Json Web keys command<a class="anchor-link" href="#generate-new-json-web-keys-command">¶</a></h1>
+<h1 id="generate-keys-in-certificate-format-commands">Generate keys in certificate format Commands<a class="anchor-link" href="#generate-keys-in-certificate-format-commands">¶</a></h1>
 </div>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a54dceac">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=f766f682">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -571,23 +561,71 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="n">dotnet</span> <span class="n">tool</span> <span class="n">install</span> <span class="p">-</span><span class="n">-global</span> <span class="n">Fhi</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="nb">CLI </span><span class="p">-</span><span class="n">-version</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0-beta1</span>
+<div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="n">dotnet</span> <span class="n">tool</span> <span class="n">install</span> <span class="p">-</span><span class="n">-global</span> <span class="n">Fhi</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="nb">CLI </span><span class="p">-</span><span class="n">-prerelease</span>
 
-<span class="nv">$keyFileName</span> <span class="p">=</span> <span class="s2">""</span>
-<span class="nv">$keyDirectory</span> <span class="p">=</span> <span class="s2">""</span>
-<span class="nv">$keyCustomKid</span> <span class="p">=</span> <span class="s2">""</span>
+<span class="nv">$certificateCommonName</span> <span class="p">=</span> <span class="s2">"CertName"</span>
+<span class="nv">$certificatePassword</span> <span class="p">=</span> <span class="s2">"CertPw123!"</span>
+<span class="nv">$certificateDirectory</span> <span class="p">=</span> <span class="s2">"C:\Certificates\test1"</span>
 
-<span class="n">fhi-cryptography</span> <span class="n">generatejsonwebkey</span> <span class="p">-</span><span class="n">-KeyFileNamePrefix</span> <span class="nv">$keyFileName</span> <span class="p">-</span><span class="n">-KeyDirectory</span> <span class="nv">$keyDirectory</span> <span class="p">-</span><span class="n">-KeyCustomKid</span> <span class="nv">$keyCustomKid</span>
+
+<span class="n">fhi-cryptography</span> <span class="n">generatecertificate</span> <span class="p">-</span><span class="n">-CertificateCommonName</span> <span class="nv">$certificateCommonName</span> <span class="p">-</span><span class="n">-CertificatePassword</span> <span class="nv">$certificatePassword</span> <span class="p">-</span><span class="n">-CertificateDirectory</span> <span class="nv">$certificateDirectory</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">dotnet tool install --global Fhi.Security.Cryptography.CLI --version 1.0.0-beta1
+<div class="clipboard-copy-txt" id="cell-1">dotnet tool install --global Fhi.Security.Cryptography.CLI --prerelease
 
-$keyFileName = ""
-$keyDirectory = ""
-$keyCustomKid = ""
+$certificateCommonName = "CertName"
+$certificatePassword = "CertPw123!"
+$certificateDirectory = "C:\Certificates\test1"
 
-fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirectory $keyDirectory --KeyCustomKid $keyCustomKid</div>
+
+fhi-cryptography generatecertificate --CertificateCommonName $certificateCommonName --CertificatePassword $certificatePassword --CertificateDirectory $certificateDirectory</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fc7ecac3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="command">Command<a class="anchor-link" href="#command">¶</a></h2><pre><code> fhi-cryptography generatecertificate --CertificateCommonName &lt;NAME&gt; --CertificatePassword &lt;PASSWORD&gt; --CertificateDirectory &lt;PATH&gt;
+</code></pre>
+<h2 id="parameters">Parameters<a class="anchor-link" href="#parameters">¶</a></h2><table>
+<thead>
+<tr>
+<th>Parameter name</th>
+<th>Short name</th>
+<th>Description</th>
+<th>Required</th>
+<th>Sample</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CertificateCommonName</td>
+<td>cn</td>
+<td>Common name of the certificate, key file name prefix. <br/><br/>Files generated: <br/><code>&lt;CommonName&gt;_private.pfx</code><br/> <code>&lt;CommonName&gt;_public.pem</code><br/> <code>&lt;CommonName&gt;_thumbprint.txt</code></td>
+<td><b>Yes</b></td>
+<td><code>"newCertificate"</code></td>
+</tr>
+<tr>
+<td>CertificatePassword</td>
+<td>pwd</td>
+<td>Password for the private certificate.</td>
+<td><b>Yes</b></td>
+<td><code>"CertPassword123!"</code></td>
+</tr>
+<tr>
+<td>CertificateDirectory</td>
+<td>dir</td>
+<td>Path to where private and public key will be stored.</td>
+<td><b>No</b></td>
+<td><code>"C:\\temp"</code></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -600,8 +638,8 @@ fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirect
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
-<a class="btn btn-neutral float-left" href="../generatecertificates/" title="Generate new certificates command"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-<a class="btn btn-neutral float-right" href="../readclientsecret/" title="Readclientsecret">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral float-left" href="../../command-overview/" title="Cryptography Tool (Jwk)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+<a class="btn btn-neutral float-right" href="../generatenewjsonwebkeys/" title="Generate new Json Web keys Command">Next <span class="icon icon-circle-arrow-right"></span></a>
 </div>
 <hr/>
 <div role="contentinfo">
@@ -616,8 +654,8 @@ fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirect
 </div>
 <div aria-label="Versions" class="rst-versions" role="note">
 <span class="rst-current-version" data-toggle="rst-current-version">
-<span><a href="../generatecertificates/" style="color: #fcfcfc">« Previous</a></span>
-<span><a href="../readclientsecret/" style="color: #fcfcfc">Next »</a></span>
+<span><a href="../../command-overview/" style="color: #fcfcfc">« Previous</a></span>
+<span><a href="../generatenewjsonwebkeys/" style="color: #fcfcfc">Next »</a></span>
 </span>
 </div>
 <script src="../../../js/jquery-3.6.0.min.js"></script>
