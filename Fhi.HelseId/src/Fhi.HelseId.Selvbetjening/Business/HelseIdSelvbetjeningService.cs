@@ -3,8 +3,8 @@ using System.Text.Json;
 using Fhi.HelseIdSelvbetjening.Business.Models;
 using Fhi.HelseIdSelvbetjening.Infrastructure;
 using Fhi.HelseIdSelvbetjening.Infrastructure.Selvbetjening;
+using Fhi.Security.Cryptography.Jwks;
 using Microsoft.IdentityModel.Tokens;
-using Fhi.Security.Cryptography;
 using static Fhi.HelseIdSelvbetjening.Business.Models.ErrorResult;
 
 namespace Fhi.HelseIdSelvbetjening.Business

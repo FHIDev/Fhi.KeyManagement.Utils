@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
 
-namespace Fhi.Security.Cryptography
+namespace Fhi.Security.Cryptography.Certificates
 {
     /// <summary>
     /// Represents a pair of cryptographic keys and the associated certificate thumbprint.

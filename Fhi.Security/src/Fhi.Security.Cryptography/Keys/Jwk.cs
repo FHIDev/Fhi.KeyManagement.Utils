@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text.Json;
 
-namespace Fhi.Security.Cryptography
+namespace Fhi.Security.Cryptography.Jwks
 {
     /// <summary>
     /// Generate Json Web Keys

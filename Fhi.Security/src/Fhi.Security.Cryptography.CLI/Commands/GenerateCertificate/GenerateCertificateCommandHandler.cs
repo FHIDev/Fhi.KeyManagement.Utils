@@ -1,3 +1,4 @@
+using Fhi.Security.Cryptography.Certificates;
 using Fhi.Security.Cryptography.CLI.Services;
 using Microsoft.Extensions.Logging;
 

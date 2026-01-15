@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
-using Fhi.Security.Cryptography;
+﻿using Fhi.Security.Cryptography.Jwks;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json;
 
 namespace Fhi.Security.Cryptography.UnitTests
 {
