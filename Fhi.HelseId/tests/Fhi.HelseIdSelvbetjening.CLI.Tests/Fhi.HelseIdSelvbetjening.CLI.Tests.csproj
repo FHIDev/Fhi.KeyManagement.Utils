@@ -1,14 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
-    <RootNamespace>Fhi.HelseIdSelvbetjening.CLI</RootNamespace>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing" />
@@ -27,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Fhi.Security\src\Fhi.Security.Cryptography.CLI\Fhi.Security.Cryptography.CLI.csproj" />
     <ProjectReference Include="..\..\src\Fhi.HelseIdSelvbetjening.CLI\Fhi.HelseIdSelvbetjening.CLI.csproj" />
     <ProjectReference Include="..\Fhi.HelseIdSelvbetjening.UnitTests\Fhi.HelseIdSelvbetjening.UnitTests.csproj" />
   </ItemGroup>
@@ -37,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="AcceptanceTests\TestData\oldkey.json">
+    <None Update="EndToEndTests\TestData\oldkey.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

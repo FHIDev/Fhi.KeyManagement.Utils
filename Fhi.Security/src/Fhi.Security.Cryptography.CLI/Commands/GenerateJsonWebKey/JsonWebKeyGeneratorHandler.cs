@@ -1,4 +1,5 @@
 using Fhi.Security.Cryptography.CLI.Services;
+using Fhi.Security.Cryptography.Jwks;
 using Microsoft.Extensions.Logging;
 
 namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey

@@ -1,8 +1,8 @@
-﻿using System.CommandLine;
-using System.CommandLine.Invocation;
-using Fhi.Security.Cryptography.CLI.Commands;
+﻿using Fhi.Security.Cryptography.CLI.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 
 namespace Fhi.Security.Cryptography.CLI
 {
@@ -28,7 +28,7 @@ namespace Fhi.Security.Cryptography.CLI
             var invocationConfig = new InvocationConfiguration
             {
                 // Setting this to false enables us to create our own try catch exception handler
-                EnableDefaultExceptionHandler = false 
+                EnableDefaultExceptionHandler = false
             };
 
             try
@@ -67,7 +67,7 @@ namespace Fhi.Security.Cryptography.CLI
             var host = hostBuilder.BuildHost();
             var commandBuilders = host.Services.GetServices<ICommandBuilder>();
 
-            var rootCommand = new RootCommand("HelseID self-service commands");
+            var rootCommand = new RootCommand("Cryptography commands");
             foreach (var builder in commandBuilders)
             {
                 var command = builder.Build(host);

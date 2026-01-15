@@ -1,8 +1,8 @@
 ﻿using Fhi.HelseIdSelvbetjening.Infrastructure.Selvbetjening;
 using Fhi.HelseIdSelvbetjening.UnitTests.Setup;
+using Fhi.Security.Cryptography.Jwks;
 using NSubstitute;
 using System.Net;
-using Fhi.Security.Cryptography;
 
 namespace Fhi.HelseIdSelvbetjening.UnitTests.Infrastructure
 {

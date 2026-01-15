@@ -1,22 +1,19 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{BA5A1542-0A32-41A2-8EE1-4647B1DA53B3}"
-	ProjectSection(SolutionItems) = preProject
-		samples\generate-keys.ps1 = samples\generate-keys.ps1
-		samples\generate-keys.sh = samples\generate-keys.sh
-		samples\update-clientsecret.ps1 = samples\update-clientsecret.ps1
-		samples\update-clientsecret.sh = samples\update-clientsecret.sh
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B31D3BB4-71ED-4EF0-9D3D-F7BC774FDD2D}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
+		Directory.Build.Props = Directory.Build.Props
+		.github\workflows\CI.yml = .github\workflows\CI.yml
+		Directory.Test.props = Directory.Test.props
+		.github\workflows\Fhi.Security.Cryptography.CLI.publish.yml = .github\workflows\Fhi.Security.Cryptography.CLI.publish.yml
+		.github\workflows\Fhi.Security.Cryptography.publish.yml = .github\workflows\Fhi.Security.Cryptography.publish.yml
 		global.json = global.json
-		.github\workflows\HelseId.Tools.CI.yml = .github\workflows\HelseId.Tools.CI.yml
-		.github\workflows\HelseId.Tools.Documentation.yml = .github\workflows\HelseId.Tools.Documentation.yml
-		.github\workflows\HelseId.Tools.publish.yml = .github\workflows\HelseId.Tools.publish.yml
+		.github\workflows\Fhi.HelseIdSelvbetjening.CLI.publish.yml = .github\workflows\Fhi.HelseIdSelvbetjening.CLI.publish.yml
+		.github\workflows\Documentation.yml = .github\workflows\Documentation.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fhi.HelseId", "Fhi.HelseId", "{EA05B801-37F8-49A7-8721-CC8C75F415CF}"
@@ -24,6 +21,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D4A6631E-D7D4-4AEA-BF8C-75046AC71D47}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9252C91C-4CC8-4C69-A30C-BE3994DFEFEB}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.HelseId\tests\Directory.Build.props = Fhi.HelseId\tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.HelseIdSelvbetjening", "Fhi.HelseId\src\Fhi.HelseId.Selvbetjening\Fhi.HelseIdSelvbetjening.csproj", "{7E16E7B8-8C81-3C16-2D24-9BA1EEB81133}"
 EndProject
@@ -38,6 +38,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{01985FAE-73E8-4269-B5F5-22D6CBF504DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FEA26183-6803-46AB-8F31-1C02E5FB0BBA}"
+	ProjectSection(SolutionItems) = preProject
+		Fhi.Security\tests\Directory.Build.props = Fhi.Security\tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.Security.Cryptography", "Fhi.Security\src\Fhi.Security.Cryptography\Fhi.Security.Cryptography.csproj", "{4D44BE12-D8D9-809E-9493-DF9116AF65BC}"
 EndProject
@@ -46,6 +49,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.Security.Cryptography.CLI", "Fhi.Security\src\Fhi.Security.Cryptography.CLI\Fhi.Security.Cryptography.CLI.csproj", "{1D543554-C0D2-B0A7-7908-F49DC5E24896}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fhi.Security.Cryptography.CLI.Tests", "Fhi.Security\tests\Fhi.Security.Cryptography.CLI.Tests\Fhi.Security.Cryptography.CLI.Tests.csproj", "{73F50D6D-E5EF-4E94-8F38-C3D889D5636D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{2C0E3283-E04C-4F66-AB77-7F2526B195D9}"
+	ProjectSection(SolutionItems) = preProject
+		Samples\read-clientsecret.ps1 = Samples\read-clientsecret.ps1
+		Samples\TestScript.md = Samples\TestScript.md
+		Samples\update-clientsecret.ps1 = Samples\update-clientsecret.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

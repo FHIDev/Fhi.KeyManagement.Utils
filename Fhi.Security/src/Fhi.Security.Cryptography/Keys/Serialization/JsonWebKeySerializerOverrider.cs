@@ -1,12 +1,13 @@
+using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Microsoft.IdentityModel.Tokens
+namespace Fhi.Security.Cryptography.Serialization
 {
     /// <summary>
     /// Custom converter that serializes only the public JWK fields.
     /// </summary>
-    class PublicJsonWebKeyConverter : JsonConverter<JsonWebKey>
+    internal class PublicJsonWebKeyConverter : JsonConverter<JsonWebKey>
     {
         /// <inheritdoc/>
         public override JsonWebKey? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

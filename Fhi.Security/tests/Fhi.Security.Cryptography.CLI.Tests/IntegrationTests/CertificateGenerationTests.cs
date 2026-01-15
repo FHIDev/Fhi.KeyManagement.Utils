@@ -1,8 +1,7 @@
-using Fhi.HelseIdSelvbetjening.CLI.IntegrationTests.Setup;
+using Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate;
+using Fhi.Security.Cryptography.CLI.IntegrationTests.Setup;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;
-using System.CommandLine;
-using Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate;
 
 namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
 {
@@ -58,11 +57,11 @@ namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
                 $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", "TestCert",
                 $"--{GenerateCertificateParameterNames.CertificatePassword.Long}", "TestPassword123!"
             };
-            
+
             var expectedPublicCertPath = Path.Combine(Environment.CurrentDirectory, "TestCert_public.pem");
             var expectedPrivateCertPath = Path.Combine(Environment.CurrentDirectory, "TestCert_private.pfx");
             var expectedThumbprintPath = Path.Combine(Environment.CurrentDirectory, "TestCert_thumbprint.txt");
-            
+
             var rootCommandBuilder = new RootCommandBuilder()
               .WithArgs(args)
               .WithFileHandler(fileHandlerMock)
@@ -84,7 +83,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
                 Assert.That(logs, Does.Contain($"Thumbprint saved: {expectedThumbprintPath}"));
             }
         }
-        
+
         [Test]
         public async Task GenerateCertificates_MissingPassword_ThrowsError()
         {

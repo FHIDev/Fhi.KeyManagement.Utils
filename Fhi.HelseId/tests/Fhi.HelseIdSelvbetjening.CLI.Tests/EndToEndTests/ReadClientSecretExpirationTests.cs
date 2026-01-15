@@ -1,5 +1,4 @@
 ﻿using Fhi.HelseIdSelvbetjening.CLI.Commands.ReadClientSecretExpiration;
-using Fhi.HelseIdSelvbetjening.CLI.Commands.UpdateClientKey;
 
 namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
 {
@@ -7,56 +6,8 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
     /// Manual acceptance tests for the CLI. These tests should be run against test environment.
     /// </summary>
     [TestFixture, Explicit]
-    public class AcceptanceTests
+    public class ReadClientSecretExpirationTests
     {
-        /// <summary>
-        /// In order to run this test:
-        /// 1. Set directory to where new keys should be stored
-        /// 2. Set directory to where existing (old) keys is stored
-        /// 3. Set clientId
-        /// 
-        /// Note: In order to update secret the nhn:selvbetjening/client scope must be set on the client
-        /// </summary>
-        /// <returns></returns>
-        [Test, Explicit("This test generates keys and update client with new keys should be run manually.")]
-        public async Task GenerateJsonWebKeys_And_UpdateClientKeysFromPath()
-        {
-            using var stringWriter = new StringWriter();
-            Console.SetOut(stringWriter);
-            /******************************************************************************************
-            * Generate new keys
-            *****************************************************************************************/
-
-            var keyDirectory = Path.Combine(Environment.CurrentDirectory, "TestData");
-            var keyPrefix = "manualtest";
-            int exitCodeGenerateJsonWebKeys = await Security.Cryptography.CLI.Program.Main([
-                "generatejsonwebkey",
-                $"--KeyFileNamePrefix", keyPrefix,
-                $"--KeyDirectory", keyDirectory
-            ]);
-
-            var output = stringWriter.ToString();
-            Assert.That(exitCodeGenerateJsonWebKeys, Is.EqualTo(0), "Generation of keys succeeded");
-
-            /******************************************************************************************
-             * Update Client with new keys
-             *****************************************************************************************/
-            Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", "Test");
-            var oldkeyPath = Path.Combine(Environment.CurrentDirectory, "TestData") + "\\oldkey.json";
-            var clientId = "88d474a8-07df-4dc4-abb0-6b759c2b99ec";
-            var exitCodeUpdateClient = await Program.Main(
-            [
-                UpdateClientKeyParameterNames.CommandName,
-                $"--{UpdateClientKeyParameterNames.NewPublicJwkPath.Long}", keyDirectory + "/" + keyPrefix + "_public.json",
-                $"--{UpdateClientKeyParameterNames.ExistingPrivateJwkPath.Long}", oldkeyPath,
-                $"--{UpdateClientKeyParameterNames.ClientId.Long}",clientId,
-                $"--{UpdateClientKeyParameterNames.YesOption.Long}"
-            ]);
-
-            output = stringWriter.ToString();
-            Assert.That(exitCodeUpdateClient, Is.EqualTo(0), "Update of client keys succeeded");
-        }
-
         /// <summary>
         /// In order to run this test:
         /// 1. Set directory to where existing (old) keys is stored
@@ -68,7 +19,6 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
         /// 1. Configure Test Client ID in this file (replace the clientId below)
         /// 2. Create a TestData directory in the test project root (not in bin folder)
         /// 3. Add your private key file as TestData/oldkey.json
-        /// 4. The test will automatically set DOTNET_ENVIRONMENT=Test
         /// 
         /// Expected Results:
         /// - Success: Exit code 0, Output contains "Reading client secret expiration for client"
@@ -83,7 +33,6 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
             /******************************************************************************************
              * Read Client Secret Expiration
              *****************************************************************************************/
-            Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", "Test");
             var testProjectDirectory = GetTestProjectDirectory();
             var existingKeyPath = Path.Combine(testProjectDirectory, "AcceptanceTests", "TestData", "oldkey.json");
             var clientId = "88d474a8-07df-4dc4-abb0-6b759c2b99ec"; // Replace with your test client ID
@@ -97,7 +46,9 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
             [
                 ReadClientSecretExpirationParameterNames.CommandName,
                 $"--{ReadClientSecretExpirationParameterNames.ClientId.Long}", clientId,
-                $"--{ReadClientSecretExpirationParameterNames.ExistingPrivateJwkPath.Long}", existingKeyPath
+                $"--{ReadClientSecretExpirationParameterNames.ExistingPrivateJwkPath.Long}", existingKeyPath,
+                $"--{ReadClientSecretExpirationParameterNames.AuthorityUrl.Long}", "https://helseid-sts.test.nhn.no",
+                $"--{ReadClientSecretExpirationParameterNames.BaseAddress.Long}", "https://api.selvbetjening.test.nhn.no",
             ]);
 
             var output = stringWriter.ToString();
@@ -119,7 +70,6 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
         /// Setup Instructions:
         /// 1. Configure Test Client ID in this file (replace the clientId below)
         /// 2. Replace the existingPrivateJwk with a valid private key JSON
-        /// 3. The test will automatically set DOTNET_ENVIRONMENT=Test
         /// 
         /// Format for the private key:
         /// {
@@ -145,15 +95,16 @@ namespace Fhi.HelseIdSelvbetjening.CLI.AcceptanceTests
             /******************************************************************************************
              * Read Client Secret Expiration using direct key value
              *****************************************************************************************/
-            Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", "Test");
-            var clientId = "88d474a8-07df-4dc4-abb0-6b759c2b99ec"; // Replace with valid test client ID
-            var existingPrivateJwk = "{\"kty\":\"RSA\",\"d\":\"...\",\"n\":\"...\",\"e\":\"AQAB\"}"; // Replace with valid private key
+            var clientId = "20cfbb73-4cb2-4b20-xxx-xxxx"; // Replace with valid test client ID
+            var existingPrivateJwk = "{\"alg\":\"PS512\",\"d\":\"xxx\",\"kid\":\"xxx\"}"; // Replace with valid private key
 
             int exitCode = await Program.Main(
             [
                 ReadClientSecretExpirationParameterNames.CommandName,
                 $"--{ReadClientSecretExpirationParameterNames.ClientId.Long}", clientId,
-                $"--{ReadClientSecretExpirationParameterNames.ExistingPrivateJwk.Long}", existingPrivateJwk
+                $"--{ReadClientSecretExpirationParameterNames.ExistingPrivateJwk.Long}", existingPrivateJwk,
+                $"--{ReadClientSecretExpirationParameterNames.AuthorityUrl.Long}", "https://helseid-sts.test.nhn.no",
+                $"--{ReadClientSecretExpirationParameterNames.BaseAddress.Long}", "https://api.selvbetjening.test.nhn.no",
             ]);
 
             var output = stringWriter.ToString();
