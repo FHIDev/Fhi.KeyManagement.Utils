@@ -1,5 +1,5 @@
-using Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate;
 using Fhi.Security.Cryptography.CLI.Commands;
+using Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate;
 using Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey;
 using Fhi.Security.Cryptography.CLI.Services;
 using Microsoft.Extensions.Configuration;

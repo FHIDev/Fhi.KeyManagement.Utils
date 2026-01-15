@@ -1,8 +1,7 @@
-using Fhi.Security.Cryptography;
 using Fhi.Security.Cryptography.CLI.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
+namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
 {
     internal class GenerateCertificateCommandHandler(
         IFileHandler fileHandler,

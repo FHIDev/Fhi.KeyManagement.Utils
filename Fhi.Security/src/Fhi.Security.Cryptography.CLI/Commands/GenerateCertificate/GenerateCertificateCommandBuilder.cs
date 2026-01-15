@@ -1,9 +1,8 @@
-using Fhi.Security.Cryptography.CLI.Commands;
 using Fhi.Security.Cryptography.CLI.Commands.Extensions;
 using Microsoft.Extensions.Hosting;
 using System.CommandLine;
 
-namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
+namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
 {
     internal class GenerateCertificateCommandBuilder(GenerateCertificateCommandHandler commandHandler) : ICommandBuilder
     {

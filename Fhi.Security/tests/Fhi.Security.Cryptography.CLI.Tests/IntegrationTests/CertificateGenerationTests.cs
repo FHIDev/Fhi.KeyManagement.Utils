@@ -1,4 +1,4 @@
-using Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate;
+using Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate;
 using Fhi.Security.Cryptography.CLI.IntegrationTests.Setup;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;

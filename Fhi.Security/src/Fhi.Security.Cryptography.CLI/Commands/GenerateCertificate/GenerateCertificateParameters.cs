@@ -1,4 +1,4 @@
-namespace Fhi.HelseIdSelvbetjening.CLI.Commands.GenerateCertificate
+namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
 {
     internal record UpdateGenerateCertificateOptionNames(string Long, string Short);
 
