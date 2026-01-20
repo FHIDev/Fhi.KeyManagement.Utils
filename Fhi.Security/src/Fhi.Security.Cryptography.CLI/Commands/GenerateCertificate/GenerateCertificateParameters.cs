@@ -5,13 +5,21 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
     internal static class GenerateCertificateParameterNames
     {
         public const string CommandName = "generatecertificate";
+
+        // Default values
+        public const int DefaultValidityYears = 2;
+        public const int DefaultValidityMonths = 0;
+
+        // Option names
         public static readonly UpdateGenerateCertificateOptionNames CertificateCommonName = new("CertificateCommonName", "cn");
         public static readonly UpdateGenerateCertificateOptionNames CertificatePassword = new("CertificatePassword", "pwd");
         public static readonly UpdateGenerateCertificateOptionNames CertificateDirectory = new("CertificateDirectory", "dir");
+        public static readonly UpdateGenerateCertificateOptionNames ValidityYears = new("ValidityYears", "vy");
+        public static readonly UpdateGenerateCertificateOptionNames ValidityMonths = new("ValidityMonths", "vm");
     }
 
     /// <summary>
-    /// Parameters for generating exportable certificates with RSA algorithm with 2048-bit key length
+    /// Parameters for generating exportable certificates with RSA algorithm with 4096-bit key length
     /// </summary>
     internal class GenerateCertificateParameters
     {
@@ -29,5 +37,15 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
         /// Directory where public and private certificates will be stored
         /// </summary>
         public string? CertificateDirectory { get; set; }
+
+        /// <summary>
+        /// Number of years the certificate is valid (default: 2)
+        /// </summary>
+        public int ValidityYears { get; set; } = GenerateCertificateParameterNames.DefaultValidityYears;
+
+        /// <summary>
+        /// Additional months the certificate is valid (default: 0)
+        /// </summary>
+        public int ValidityMonths { get; set; } = GenerateCertificateParameterNames.DefaultValidityMonths;
     };
 }

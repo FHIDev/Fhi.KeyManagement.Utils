@@ -35,18 +35,34 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
                 "Directory to store the generated certificates",
                 isRequired: false);
 
+            var validityYearsOption = generateCertCommand.CreateIntOption(
+                GenerateCertificateParameterNames.ValidityYears.Long,
+                GenerateCertificateParameterNames.ValidityYears.Short,
+                "Number of years the certificate is valid",
+                defaultValue: GenerateCertificateParameterNames.DefaultValidityYears);
+
+            var validityMonthsOption = generateCertCommand.CreateIntOption(
+                GenerateCertificateParameterNames.ValidityMonths.Long,
+                GenerateCertificateParameterNames.ValidityMonths.Short,
+                "Additional months the certificate is valid",
+                defaultValue: GenerateCertificateParameterNames.DefaultValidityMonths);
+
             generateCertCommand.SetAction((ParseResult parseResult) =>
             {
                 var certificateCommonName = parseResult.GetValue(certificateCommonNameOption);
                 var certificatePassword = parseResult.GetValue(certificatePasswordOption);
                 var certificateDirectory = parseResult.GetValue(certificateDirectoryOption);
+                var validityYears = parseResult.GetValue(validityYearsOption);
+                var validityMonths = parseResult.GetValue(validityMonthsOption);
 
                 var parameters = new GenerateCertificateParameters
                 {
                     // TODO: fix "may be null"
                     CertificateCommonName = certificateCommonName!,
                     CertificatePassword = certificatePassword!,
-                    CertificateDirectory = certificateDirectory
+                    CertificateDirectory = certificateDirectory,
+                    ValidityYears = validityYears,
+                    ValidityMonths = validityMonths
                 };
 
                 _commandHandler.Execute(parameters);

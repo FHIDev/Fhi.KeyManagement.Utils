@@ -30,7 +30,11 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
                     _fileHandler.CreateDirectory(certPath);
                 }
 
-                var certificateFiles = Certificate.CreateAsymmetricKeyPair(parameters.CertificateCommonName, parameters.CertificatePassword);
+                var certificateFiles = Certificate.CreateAsymmetricKeyPair(
+                    parameters.CertificateCommonName,
+                    parameters.CertificatePassword,
+                    parameters.ValidityYears,
+                    parameters.ValidityMonths);
 
                 var privateCertPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_private.pfx");
                 var publicCertPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_public.pem");
