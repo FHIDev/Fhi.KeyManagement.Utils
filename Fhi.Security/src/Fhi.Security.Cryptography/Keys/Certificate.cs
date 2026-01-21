@@ -28,6 +28,12 @@ namespace Fhi.Security.Cryptography.Certificates
         /// <summary>RSA signature padding mode.</summary>
         public static readonly RSASignaturePadding DefaultSignaturePadding = RSASignaturePadding.Pkcs1;
 
+        /// <summary>Default certificate validity in years.</summary>
+        public const int DefaultValidityYears = 2;
+
+        /// <summary>Default additional certificate validity in months.</summary>
+        public const int DefaultValidityMonths = 0;
+
         /// <summary>
         /// Create a new asymmetric key pair in certificate format.
         /// </summary>
@@ -39,8 +45,8 @@ namespace Fhi.Security.Cryptography.Certificates
         public static CertificateKeyPair CreateAsymmetricKeyPair(
             string commonName,
             string password,
-            int validityYears,
-            int validityMonths)
+            int validityYears = DefaultValidityYears,
+            int validityMonths = DefaultValidityMonths)
         {
             using var rsa = RSA.Create(DefaultKeySize);
             var request = new CertificateRequest(

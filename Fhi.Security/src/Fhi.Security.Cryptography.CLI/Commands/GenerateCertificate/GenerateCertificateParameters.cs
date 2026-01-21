@@ -1,3 +1,5 @@
+using Fhi.Security.Cryptography.Certificates;
+
 namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
 {
     internal record UpdateGenerateCertificateOptionNames(string Long, string Short);
@@ -5,10 +7,6 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
     internal static class GenerateCertificateParameterNames
     {
         public const string CommandName = "generatecertificate";
-
-        // Default values
-        public const int DefaultValidityYears = 2;
-        public const int DefaultValidityMonths = 0;
 
         // Option names
         public static readonly UpdateGenerateCertificateOptionNames CertificateCommonName = new("CertificateCommonName", "cn");
@@ -41,11 +39,11 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
         /// <summary>
         /// Number of years the certificate is valid (default: 2)
         /// </summary>
-        public int ValidityYears { get; set; } = GenerateCertificateParameterNames.DefaultValidityYears;
+        public int ValidityYears { get; set; } = Certificate.DefaultValidityYears;
 
         /// <summary>
         /// Additional months the certificate is valid (default: 0)
         /// </summary>
-        public int ValidityMonths { get; set; } = GenerateCertificateParameterNames.DefaultValidityMonths;
+        public int ValidityMonths { get; set; } = Certificate.DefaultValidityMonths;
     };
 }

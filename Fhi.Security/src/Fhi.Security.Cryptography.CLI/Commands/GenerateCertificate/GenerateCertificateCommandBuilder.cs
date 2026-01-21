@@ -1,3 +1,4 @@
+using Fhi.Security.Cryptography.Certificates;
 using Fhi.Security.Cryptography.CLI.Commands.Extensions;
 using Microsoft.Extensions.Hosting;
 using System.CommandLine;
@@ -39,13 +40,13 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
                 GenerateCertificateParameterNames.ValidityYears.Long,
                 GenerateCertificateParameterNames.ValidityYears.Short,
                 "Number of years the certificate is valid",
-                defaultValue: GenerateCertificateParameterNames.DefaultValidityYears);
+                defaultValue: Certificate.DefaultValidityYears);
 
             var validityMonthsOption = generateCertCommand.CreateIntOption(
                 GenerateCertificateParameterNames.ValidityMonths.Long,
                 GenerateCertificateParameterNames.ValidityMonths.Short,
                 "Additional months the certificate is valid",
-                defaultValue: GenerateCertificateParameterNames.DefaultValidityMonths);
+                defaultValue: Certificate.DefaultValidityMonths);
 
             generateCertCommand.SetAction((ParseResult parseResult) =>
             {
