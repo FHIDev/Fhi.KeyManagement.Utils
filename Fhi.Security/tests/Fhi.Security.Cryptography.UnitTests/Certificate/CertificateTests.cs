@@ -34,7 +34,7 @@ namespace Fhi.Security.Cryptography.UnitTests.Certificate
                 Assert.That(result.CertificateThumbprint, Is.Not.Empty);
                 Assert.That(cert.Subject, Does.Contain($"CN={TestCommonName}"));
                 Assert.That(rsaPublicKey.KeySize, Is.EqualTo(Certificates.Certificate.DefaultKeySize));
-                Assert.That(cert.SignatureAlgorithm.FriendlyName, Does.Contain(Certificates.Certificate.DefaultHashAlgorithm.Name));
+                Assert.That(cert.SignatureAlgorithm.FriendlyName, Does.Contain(Certificates.Certificate.DefaultHashAlgorithm.Name!.ToLowerInvariant()));
                 Assert.That(cert.NotAfter.ToUniversalTime(), Is.EqualTo(expectedNotAfter).Within(ValidityTolerance));
             }
         }
