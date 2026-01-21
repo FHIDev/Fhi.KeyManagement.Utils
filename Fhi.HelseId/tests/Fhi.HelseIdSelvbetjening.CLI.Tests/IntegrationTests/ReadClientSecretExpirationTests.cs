@@ -14,7 +14,9 @@ namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
         [TestCase("{\n  \"kid\": \"test-kid\",\n  \"kty\": \"RSA\",\n  \"d\": \"test-d-value\",\n  \"n\": \"test-n-value\",\n  \"e\": \"AQAB\"\n}")]
         [TestCase("{\"d\":\"test-kid\",\"e\":\"AQAB\",\"kid\":\"test-kid\",\"kty\":\"RSA\",\"n\":\"test-n-value\"}")]
         [TestCase("{ \"kid\": \"test-kid\", \"kty\": \"RSA\", \"d\": \"test-data\", \"n\": \"test-modulus\", \"e\": \"AQAB\" }")]
-        // [TestCase(@"{""kid"":""test-with-special-chars-!@#$%^&*()"",""d"":""data-with-quotes-\""and\""-backslashes-\\"",""n"":""modulus"",""e"":""AQAB""}")]
+        [TestCase(@"{""kid"":""test-kid"",""kty"":""RSA"",""d"":""test-with-special-chars-!@#$%^&*()"",""n"":""test-n-value"",""e"":""AQAB""}")]
+        [TestCase(@"{""kid"":""test-kid"",""kty"":""RSA"",""d"":""data-with-quotes-\""and\""-backslashes-\\"",""n"":""test-n-value"",""e"":""AQAB""}")]
+        [TestCase("{\\\"kid\\\":\\\"test-kid\\\",\\\"kty\\\":\\\"RSA\\\",\\\"d\\\":\\\"test-d-value\\\",\\\"n\\\":\\\"test-n-value\\\",\\\"e\\\":\\\"AQAB\\\"}")]
         public async Task ReadClientSecretExpiration_ValidDirectJwkArgument_ExitCode0(string jwk)
         {
             var fakeLogProvider = new FakeLoggerProvider();
@@ -40,7 +42,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(exitCode, Is.EqualTo(0));
+                Assert.That(exitCode, Is.Zero);
                 Assert.That(fakeLogProvider.Collector?.LatestRecord.Message, Does.Contain(((DateTimeOffset)clientSecrets.FirstOrDefault()!.Expiration!).ToUnixTimeSeconds().ToString()));
                 var logs = fakeLogProvider.Collector?.GetSnapshot().Select(x => x.Message).ToList();
                 Assert.That(logs!, Does.Contain("Kid: test-kid"));
