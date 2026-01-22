@@ -35,18 +35,25 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                 "Custom Kid value to use in the generated keys",
                 isRequired: false);
 
+            var keyBase64Option = generateJsonWebKeyCommand.CreateBoolOption(
+                GenerateJsonWebKeyParameterNames.KeyBase64.Long,
+                GenerateJsonWebKeyParameterNames.KeyBase64.Short,
+                "Output the JWK content as base64-encoded string");
+
             generateJsonWebKeyCommand.SetAction((ParseResult parseResult) =>
             {
                 var keyFileNamePrefix = parseResult.GetValue(keyFileNamePrefixOption);
                 var keyDirectory = parseResult.GetValue(keyDirectoryOption);
                 var keyCustomKid = parseResult.GetValue(keyCustomKidOption);
+                var keyBase64 = parseResult.GetValue(keyBase64Option);
 
                 var parameters = new GenerateJsonWebKeyParameters
                 {
                     // TODO: fix "may be null"
                     KeyFileNamePrefix = keyFileNamePrefix!,
                     KeyDirectory = keyDirectory,
-                    KeyCustomKid = keyCustomKid
+                    KeyCustomKid = keyCustomKid,
+                    KeyBase64 = keyBase64
                 };
 
                 _commandHandler.Execute(parameters);
