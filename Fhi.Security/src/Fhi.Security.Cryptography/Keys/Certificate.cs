@@ -41,19 +41,28 @@ namespace Fhi.Security.Cryptography.Certificates
         /// <param name="password">Password of the private key</param>
         /// <param name="validityYears">Number of years the certificate is valid</param>
         /// <param name="validityMonths">Additional months the certificate is valid</param>
+        /// <param name="keySize">RSA key size in bits (defaults to 4096)</param>
+        /// <param name="hashAlgorithm">Hash algorithm for certificate signing (defaults to SHA512)</param>
+        /// <param name="signaturePadding">RSA signature padding mode (defaults to PKCS#1)</param>
         /// <returns>A certificate key pair containing private key, public key, and thumbprint</returns>
         public static CertificateKeyPair CreateAsymmetricKeyPair(
             string commonName,
             string password,
             int validityYears = DefaultValidityYears,
-            int validityMonths = DefaultValidityMonths)
+            int validityMonths = DefaultValidityMonths,
+            int keySize = DefaultKeySize,
+            HashAlgorithmName? hashAlgorithm = null,
+            RSASignaturePadding? signaturePadding = null)
         {
-            using var rsa = RSA.Create(DefaultKeySize);
+            hashAlgorithm ??= DefaultHashAlgorithm;
+            signaturePadding ??= DefaultSignaturePadding;
+
+            using var rsa = RSA.Create(keySize);
             var request = new CertificateRequest(
                 $"CN={commonName}",
                 rsa,
-                DefaultHashAlgorithm,
-                DefaultSignaturePadding);
+                hashAlgorithm.Value,
+                signaturePadding);
 
             var notAfter = DateTimeOffset.Now.AddYears(validityYears).AddMonths(validityMonths);
             var cert = request.CreateSelfSigned(DateTimeOffset.Now, notAfter);
