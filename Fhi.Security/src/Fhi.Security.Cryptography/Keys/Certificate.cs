@@ -28,19 +28,15 @@ namespace Fhi.Security.Cryptography.Certificates
         /// <summary>RSA signature padding mode.</summary>
         public static readonly RSASignaturePadding DefaultSignaturePadding = RSASignaturePadding.Pkcs1;
 
-        /// <summary>Default certificate validity in years.</summary>
-        public const int DefaultValidityYears = 2;
-
-        /// <summary>Default additional certificate validity in months.</summary>
-        public const int DefaultValidityMonths = 0;
+        /// <summary>Default certificate validity in months.</summary>
+        public const int DefaultValidityMonths = 24;
 
         /// <summary>
         /// Create a new asymmetric key pair in certificate format.
         /// </summary>
         /// <param name="commonName">Certificate common name</param>
         /// <param name="password">Password of the private key</param>
-        /// <param name="validityYears">Number of years the certificate is valid</param>
-        /// <param name="validityMonths">Additional months the certificate is valid</param>
+        /// <param name="validityMonths">Number of months the certificate is valid (default: 24)</param>
         /// <param name="keySize">RSA key size in bits (defaults to 4096)</param>
         /// <param name="hashAlgorithm">Hash algorithm for certificate signing (defaults to SHA512)</param>
         /// <param name="signaturePadding">RSA signature padding mode (defaults to PKCS#1)</param>
@@ -48,7 +44,6 @@ namespace Fhi.Security.Cryptography.Certificates
         public static CertificateKeyPair CreateAsymmetricKeyPair(
             string commonName,
             string password,
-            int validityYears = DefaultValidityYears,
             int validityMonths = DefaultValidityMonths,
             int keySize = DefaultKeySize,
             HashAlgorithmName? hashAlgorithm = null,
@@ -64,7 +59,7 @@ namespace Fhi.Security.Cryptography.Certificates
                 hashAlgorithm.Value,
                 signaturePadding);
 
-            var notAfter = DateTimeOffset.Now.AddYears(validityYears).AddMonths(validityMonths);
+            var notAfter = DateTimeOffset.Now.AddMonths(validityMonths);
             var cert = request.CreateSelfSigned(DateTimeOffset.Now, notAfter);
 
             var privateKeyBytes = cert.Export(X509ContentType.Pfx, password);

@@ -33,7 +33,6 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
                 var certificateFiles = Certificate.CreateAsymmetricKeyPair(
                     parameters.CertificateCommonName,
                     parameters.CertificatePassword,
-                    parameters.ValidityYears,
                     parameters.ValidityMonths);
 
                 var privateCertPath = Path.Combine(certPath, $"{parameters.CertificateCommonName}_private.pfx");

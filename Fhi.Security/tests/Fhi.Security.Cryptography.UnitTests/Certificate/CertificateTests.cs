@@ -10,20 +10,19 @@ namespace Fhi.Security.Cryptography.UnitTests.Certificate
         private const string TestPassword = "TestPassword123!";
         private static readonly TimeSpan ValidityTolerance = TimeSpan.FromSeconds(30);
 
-        [TestCase(2, 0)]
-        [TestCase(3, 0)]
-        [TestCase(1, 6)]
-        [TestCase(0, 18)]
+        [TestCase(24)]
+        [TestCase(36)]
+        [TestCase(18)]
+        [TestCase(6)]
         public void GIVEN_CreateAsymmetricKeyPair_WHEN_ValidParameters_THEN_CreateCertificateWithCorrectExpiration(
-            int validityYears, int validityMonths)
+            int validityMonths)
         {
             var result = Certificates.Certificate.CreateAsymmetricKeyPair(
-                TestCommonName, TestPassword, validityYears, validityMonths);
+                TestCommonName, TestPassword, validityMonths);
 
             using var cert = X509CertificateLoader.LoadPkcs12(result.CertificatePrivateKey.ToArray(), TestPassword);
 
             var expectedNotAfter = DateTime.UtcNow
-                .AddYears(validityYears)
                 .AddMonths(validityMonths);
 
             var rsaPublicKey = cert.GetRSAPublicKey();
@@ -38,6 +37,19 @@ namespace Fhi.Security.Cryptography.UnitTests.Certificate
                 Assert.That(cert.SignatureAlgorithm.FriendlyName, Does.Contain(Certificates.Certificate.DefaultHashAlgorithm.Name!.ToLowerInvariant()));
                 Assert.That(cert.NotAfter.ToUniversalTime(), Is.EqualTo(expectedNotAfter).Within(ValidityTolerance));
             }
+        }
+
+        [Test]
+        public void GIVEN_CreateAsymmetricKeyPair_WHEN_NoValiditySpecified_THEN_UseDefault24Months()
+        {
+            var result = Certificates.Certificate.CreateAsymmetricKeyPair(
+                TestCommonName, TestPassword);
+
+            using var cert = X509CertificateLoader.LoadPkcs12(result.CertificatePrivateKey.ToArray(), TestPassword);
+
+            var expectedNotAfter = DateTime.UtcNow.AddMonths(24);
+
+            Assert.That(cert.NotAfter.ToUniversalTime(), Is.EqualTo(expectedNotAfter).Within(ValidityTolerance));
         }
 
         [TestCase(2048)]

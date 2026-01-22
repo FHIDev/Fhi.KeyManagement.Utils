@@ -12,7 +12,6 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
         public static readonly UpdateGenerateCertificateOptionNames CertificateCommonName = new("CertificateCommonName", "cn");
         public static readonly UpdateGenerateCertificateOptionNames CertificatePassword = new("CertificatePassword", "pwd");
         public static readonly UpdateGenerateCertificateOptionNames CertificateDirectory = new("CertificateDirectory", "dir");
-        public static readonly UpdateGenerateCertificateOptionNames ValidityYears = new("ValidityYears", "vy");
         public static readonly UpdateGenerateCertificateOptionNames ValidityMonths = new("ValidityMonths", "vm");
     }
 
@@ -37,12 +36,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
         public string? CertificateDirectory { get; set; }
 
         /// <summary>
-        /// Number of years the certificate is valid (default: 2)
-        /// </summary>
-        public int ValidityYears { get; set; } = Certificate.DefaultValidityYears;
-
-        /// <summary>
-        /// Additional months the certificate is valid (default: 0)
+        /// Number of months the certificate is valid (default: 24)
         /// </summary>
         public int ValidityMonths { get; set; } = Certificate.DefaultValidityMonths;
     };

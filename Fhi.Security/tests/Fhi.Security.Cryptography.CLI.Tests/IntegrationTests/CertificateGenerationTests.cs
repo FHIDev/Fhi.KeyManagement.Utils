@@ -147,7 +147,7 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
 
             var exitCode = await ExecuteCommandAsync(args);
             using var cert = LoadGeneratedCertificate(certName, TestPassword);
-            var expectedNotAfter = DateTime.UtcNow.AddYears(2);
+            var expectedNotAfter = DateTime.UtcNow.AddMonths(24);
 
             using (Assert.EnterMultipleScope())
             {
@@ -157,45 +157,18 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
             }
         }
 
-        [Test]
-        public async Task GIVEN_GenerateCertificates_WHEN_ValidityYearsOnly_THEN_CertificateHasCorrectExpiration()
-        {
-            var certName = "years_only";
-            var args = new[]
-            {
-                GenerateCertificateParameterNames.CommandName,
-                $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", certName,
-                $"--{GenerateCertificateParameterNames.CertificatePassword.Long}", TestPassword,
-                "--ValidityYears", "3"
-            };
-
-            var exitCode = await ExecuteCommandAsync(args);
-
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(exitCode, Is.Zero);
-                Assert.That(_fileHandlerMock.Files, Has.Count.EqualTo(3));
-
-                using var cert = LoadGeneratedCertificate(certName, TestPassword);
-                var expectedNotAfter = DateTime.UtcNow.AddYears(3);
-
-                Assert.That(cert.NotAfter.ToUniversalTime(), Is.EqualTo(expectedNotAfter).Within(ValidityTolerance));
-            }
-        }
-
-        [TestCase("--ValidityYears", "--ValidityMonths")]
-        [TestCase("-vy", "-vm")]
+        [TestCase("--ValidityMonths")]
+        [TestCase("-vm")]
         public async Task GIVEN_GenerateCertificates_WHEN_ValidityOptions_THEN_CertificateHasCorrectExpiration(
-            string yearsOption, string monthsOption)
+            string monthsOption)
         {
-            var certName = $"validity_{yearsOption.TrimStart('-')}";
+            var certName = $"validity_{monthsOption.TrimStart('-')}";
             var args = new[]
             {
                 GenerateCertificateParameterNames.CommandName,
                 $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", certName,
                 $"--{GenerateCertificateParameterNames.CertificatePassword.Long}", TestPassword,
-                yearsOption, "1",
-                monthsOption, "6"
+                monthsOption, "18"
             };
 
             var exitCode = await ExecuteCommandAsync(args);
@@ -206,7 +179,7 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
                 Assert.That(_fileHandlerMock.Files, Has.Count.EqualTo(3));
 
                 using var cert = LoadGeneratedCertificate(certName, TestPassword);
-                var expectedNotAfter = DateTime.UtcNow.AddYears(1).AddMonths(6);
+                var expectedNotAfter = DateTime.UtcNow.AddMonths(18);
 
                 Assert.That(cert.NotAfter.ToUniversalTime(), Is.EqualTo(expectedNotAfter).Within(ValidityTolerance));
             }
