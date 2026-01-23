@@ -1,45 +1,77 @@
+using System.Security.Cryptography.X509Certificates;
 using Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate;
 using Fhi.Security.Cryptography.CLI.IntegrationTests.Setup;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;
 
-namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
+namespace Fhi.Security.Cryptography.CLI.IntegrationTests
 {
     public class CertificateGenerationTests
     {
-        [TestCase("--CertificateCommonName", "--CertificatePassword", "--CertificateDirectory")]
-        [TestCase("-cn", "-pwd", "-dir")]
-        public async Task GenerateCertificates(string commonName, string password, string directory)
+        private const string TestPassword = "TestPassword123!";
+        private static readonly TimeSpan ValidityTolerance = TimeSpan.FromSeconds(30);
+
+        private FileHandlerMock _fileHandlerMock = null!;
+        private FakeLoggerProvider _fakeLogProvider = null!;
+
+        [SetUp]
+        public void SetUp()
         {
-            var fileHandlerMock = new FileHandlerMock();
-            var fakeLogProvider = new FakeLoggerProvider();
-            var certName = "integration_test";
-            var directoryPath = "c:\\temp";
-            var certPassword = "TestPassword123!";
-            var args = new[]
-            {
-                GenerateCertificateParameterNames.CommandName,
-                $"{commonName}", certName,
-                $"{directory}", directoryPath,
-                $"{password}", certPassword
-            };
+            _fileHandlerMock = new FileHandlerMock();
+            _fakeLogProvider = new FakeLoggerProvider();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _fakeLogProvider.Dispose();
+        }
+
+        private async Task<int> ExecuteCommandAsync(params string[] args)
+        {
             var rootCommandBuilder = new RootCommandBuilder()
                 .WithArgs(args)
-                .WithFileHandler(fileHandlerMock)
-                .WithLoggerProvider(fakeLogProvider, LogLevel.Trace);
+                .WithFileHandler(_fileHandlerMock)
+                .WithLoggerProvider(_fakeLogProvider, LogLevel.Trace);
 
             var rootCommand = rootCommandBuilder.Build();
             var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
+            return await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
+        }
 
-            var commandLineBuilder = new CommandLineBuilder();
-            var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
+        private X509Certificate2 LoadGeneratedCertificate(string certName, string password)
+        {
+            var pfxFile = _fileHandlerMock.ByteFiles
+                .First(f => f.Key.EndsWith($"{certName}_private.pfx"));
+            return X509CertificateLoader.LoadPkcs12(pfxFile.Value, password);
+        }
+
+        private List<string> GetLogMessages() =>
+            _fakeLogProvider.Collector.GetSnapshot().Select(x => x.Message).ToList();
+
+        [TestCase("--CertificateCommonName", "--CertificatePassword", "--CertificateDirectory")]
+        [TestCase("-cn", "-pwd", "-dir")]
+        public async Task GIVEN_GenerateCertificates_WHEN_ValidOptions_THEN_CreateCertificateFiles(
+            string commonNameOption, string passwordOption, string directoryOption)
+        {
+            var certName = "integration_test";
+            var directoryPath = "c:\\temp";
+            var args = new[]
+            {
+                GenerateCertificateParameterNames.CommandName,
+                commonNameOption, certName,
+                directoryOption, directoryPath,
+                passwordOption, TestPassword
+            };
+
+            var exitCode = await ExecuteCommandAsync(args);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(fileHandlerMock.Files, Has.Count.EqualTo(3));
-                Assert.That(exitCode, Is.EqualTo(0));
+                Assert.That(_fileHandlerMock.Files, Has.Count.EqualTo(3));
+                Assert.That(exitCode, Is.Zero);
 
-                var logs = fakeLogProvider.Collector.GetSnapshot().Select(x => x.Message).ToList();
+                var logs = GetLogMessages();
                 Assert.That(logs, Does.Contain($"Private certificate saved: {Path.Combine(directoryPath, certName)}_private.pfx"));
                 Assert.That(logs, Does.Contain($"Public certificate saved: {Path.Combine(directoryPath, certName)}_public.pem"));
                 Assert.That(logs, Does.Contain($"Thumbprint saved: {Path.Combine(directoryPath, certName)}_thumbprint.txt"));
@@ -47,37 +79,26 @@ namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
         }
 
         [Test]
-        public async Task GenerateKeys_PathIsEmpty_UseCurrentDirectory()
+        public async Task GIVEN_GenerateCertificates_WHEN_EmptyPath_THEN_UseCurrentDirectory()
         {
-            var fakeLogProvider = new FakeLoggerProvider();
-            var fileHandlerMock = new FileHandlerMock();
+            var certName = "TestCert";
             var args = new[]
             {
                 GenerateCertificateParameterNames.CommandName,
-                $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", "TestCert",
-                $"--{GenerateCertificateParameterNames.CertificatePassword.Long}", "TestPassword123!"
+                $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", certName,
+                $"--{GenerateCertificateParameterNames.CertificatePassword.Long}", TestPassword
             };
 
-            var expectedPublicCertPath = Path.Combine(Environment.CurrentDirectory, "TestCert_public.pem");
-            var expectedPrivateCertPath = Path.Combine(Environment.CurrentDirectory, "TestCert_private.pfx");
-            var expectedThumbprintPath = Path.Combine(Environment.CurrentDirectory, "TestCert_thumbprint.txt");
+            var expectedPublicCertPath = Path.Combine(Environment.CurrentDirectory, $"{certName}_public.pem");
+            var expectedPrivateCertPath = Path.Combine(Environment.CurrentDirectory, $"{certName}_private.pfx");
+            var expectedThumbprintPath = Path.Combine(Environment.CurrentDirectory, $"{certName}_thumbprint.txt");
 
-            var rootCommandBuilder = new RootCommandBuilder()
-              .WithArgs(args)
-              .WithFileHandler(fileHandlerMock)
-              .WithLoggerProvider(fakeLogProvider, LogLevel.Trace);
-
-            var rootCommand = rootCommandBuilder.Build();
-            var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
-
-            var commandLineBuilder = new CommandLineBuilder();
-            var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
+            var exitCode = await ExecuteCommandAsync(args);
 
             using (Assert.EnterMultipleScope())
             {
-                var logs = fakeLogProvider.Collector.GetSnapshot().Select(x => x.Message).ToList();
-                Assert.That(exitCode, Is.EqualTo(0));
-
+                var logs = GetLogMessages();
+                Assert.That(exitCode, Is.Zero);
                 Assert.That(logs, Does.Contain($"Private certificate saved: {expectedPrivateCertPath}"));
                 Assert.That(logs, Does.Contain($"Public certificate saved: {expectedPublicCertPath}"));
                 Assert.That(logs, Does.Contain($"Thumbprint saved: {expectedThumbprintPath}"));
@@ -85,39 +106,82 @@ namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
         }
 
         [Test]
-        public async Task GenerateCertificates_MissingPassword_ThrowsError()
+        public async Task GIVEN_GenerateCertificates_WHEN_MissingPassword_THEN_ReturnError()
         {
-            var fileHandlerMock = new FileHandlerMock();
-            var fakeLogProvider = new FakeLoggerProvider();
-
             var args = new[]
             {
                 GenerateCertificateParameterNames.CommandName,
                 $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", "TestName",
             };
 
-            var rootCommandBuilder = new RootCommandBuilder()
-              .WithArgs(args)
-              .WithFileHandler(fileHandlerMock)
-              .WithLoggerProvider(fakeLogProvider, LogLevel.Trace);
-
             using var errorWriter = new StringWriter();
-            var originalError = Console.Error;
-            Console.SetError(errorWriter);
+            var config = new System.CommandLine.InvocationConfiguration { Error = errorWriter };
+
+            var rootCommandBuilder = new RootCommandBuilder()
+                .WithArgs(args)
+                .WithFileHandler(_fileHandlerMock)
+                .WithLoggerProvider(_fakeLogProvider, LogLevel.Trace);
 
             var rootCommand = rootCommandBuilder.Build();
             var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
-
-            var commandLineBuilder = new CommandLineBuilder();
-            var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
-
-            Console.SetError(originalError);
+            var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult, config);
 
             using (Assert.EnterMultipleScope())
             {
                 var errorOutput = errorWriter.ToString();
-                Assert.That(exitCode, Is.Not.EqualTo(0));
+                Assert.That(exitCode, Is.Not.Zero);
                 Assert.That(errorOutput, Does.Contain("Option '--CertificatePassword' is required"));
+            }
+        }
+
+        [Test]
+        public async Task GIVEN_GenerateCertificates_WHEN_DefaultValidity_THEN_UseDefaultExpiration()
+        {
+            var certName = "default_validity";
+            var args = new[]
+            {
+                GenerateCertificateParameterNames.CommandName,
+                $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", certName,
+                $"--{GenerateCertificateParameterNames.CertificatePassword.Long}", TestPassword
+            };
+
+            var exitCode = await ExecuteCommandAsync(args);
+            using var cert = LoadGeneratedCertificate(certName, TestPassword);
+            var expectedNotAfter = DateTime.UtcNow.AddMonths(24);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(_fileHandlerMock.Files, Has.Count.EqualTo(3));
+                Assert.That(cert.NotAfter.ToUniversalTime(), Is.EqualTo(expectedNotAfter).Within(ValidityTolerance));
+            }
+        }
+
+        [TestCase("--ValidityMonths")]
+        [TestCase("-vm")]
+        public async Task GIVEN_GenerateCertificates_WHEN_ValidityOptions_THEN_CertificateHasCorrectExpiration(
+            string monthsOption)
+        {
+            var certName = $"validity_{monthsOption.TrimStart('-')}";
+            var args = new[]
+            {
+                GenerateCertificateParameterNames.CommandName,
+                $"--{GenerateCertificateParameterNames.CertificateCommonName.Long}", certName,
+                $"--{GenerateCertificateParameterNames.CertificatePassword.Long}", TestPassword,
+                monthsOption, "18"
+            };
+
+            var exitCode = await ExecuteCommandAsync(args);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(_fileHandlerMock.Files, Has.Count.EqualTo(3));
+
+                using var cert = LoadGeneratedCertificate(certName, TestPassword);
+                var expectedNotAfter = DateTime.UtcNow.AddMonths(18);
+
+                Assert.That(cert.NotAfter.ToUniversalTime(), Is.EqualTo(expectedNotAfter).Within(ValidityTolerance));
             }
         }
     }

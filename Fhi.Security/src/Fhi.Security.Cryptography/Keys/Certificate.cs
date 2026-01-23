@@ -15,33 +15,52 @@ namespace Fhi.Security.Cryptography.Certificates
     );
 
     /// <summary>
-    /// 
+    /// Provides methods for creating self-signed certificates with RSA key pairs.
     /// </summary>
     public static class Certificate
     {
+        /// <summary>RSA key size in bits.</summary>
+        public const int DefaultKeySize = 4096;
+
+        /// <summary>Hash algorithm used for certificate signing.</summary>
+        public static readonly HashAlgorithmName DefaultHashAlgorithm = HashAlgorithmName.SHA512;
+
+        /// <summary>RSA signature padding mode.</summary>
+        public static readonly RSASignaturePadding DefaultSignaturePadding = RSASignaturePadding.Pkcs1;
+
+        /// <summary>Default certificate validity in months.</summary>
+        public const int DefaultValidityMonths = 24;
+
         /// <summary>
         /// Create a new asymmetric key pair in certificate format.
         /// </summary>
         /// <param name="commonName">Certificate common name</param>
         /// <param name="password">Password of the private key</param>
-        /// <returns></returns>
+        /// <param name="validityMonths">Number of months the certificate is valid (default: 24)</param>
+        /// <param name="keySize">RSA key size in bits (defaults to 4096)</param>
+        /// <param name="hashAlgorithm">Hash algorithm for certificate signing (defaults to SHA512)</param>
+        /// <param name="signaturePadding">RSA signature padding mode (defaults to PKCS#1)</param>
+        /// <returns>A certificate key pair containing private key, public key, and thumbprint</returns>
         public static CertificateKeyPair CreateAsymmetricKeyPair(
             string commonName,
-            string password)
+            string password,
+            int validityMonths = DefaultValidityMonths,
+            int keySize = DefaultKeySize,
+            HashAlgorithmName? hashAlgorithm = null,
+            RSASignaturePadding? signaturePadding = null)
         {
-            return GenerateRSACertificate(commonName, password);
-        }
-        private static CertificateKeyPair GenerateRSACertificate(string commonName, string password)
-        {
-            using var rsa = RSA.Create(4096);
+            hashAlgorithm ??= DefaultHashAlgorithm;
+            signaturePadding ??= DefaultSignaturePadding;
+
+            using var rsa = RSA.Create(keySize);
             var request = new CertificateRequest(
                 $"CN={commonName}",
                 rsa,
-                HashAlgorithmName.SHA512,
-                RSASignaturePadding.Pkcs1);
+                hashAlgorithm.Value,
+                signaturePadding);
 
-            // Evaluate certificate validity period!
-            var cert = request.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(5));
+            var notAfter = DateTimeOffset.Now.AddMonths(validityMonths);
+            var cert = request.CreateSelfSigned(DateTimeOffset.Now, notAfter);
 
             var privateKeyBytes = cert.Export(X509ContentType.Pfx, password);
 

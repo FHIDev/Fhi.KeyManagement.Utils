@@ -4,24 +4,21 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests.Setup
 {
     internal class CommandLineBuilder
     {
-        public static async Task<int> CommandLineBuilderInvokerAsync(ParseResult parseResult)
+        public static async Task<int> CommandLineBuilderInvokerAsync(
+            ParseResult parseResult,
+            InvocationConfiguration? config = null)
         {
-            var invocationConfig = new InvocationConfiguration
-            {
-                EnableDefaultExceptionHandler = false
-            };
+            config ??= new InvocationConfiguration();
+            config.EnableDefaultExceptionHandler = false;
 
-            int exitCode;
             try
             {
-                exitCode = await parseResult.InvokeAsync(invocationConfig);
-                return exitCode;
+                return await parseResult.InvokeAsync(config);
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Test caught exception: {ex.Message}");
-                exitCode = 1;
-                return exitCode;
+                config.Error.WriteLine($"Test caught exception: {ex.Message}");
+                return 1;
             }
         }
     }
