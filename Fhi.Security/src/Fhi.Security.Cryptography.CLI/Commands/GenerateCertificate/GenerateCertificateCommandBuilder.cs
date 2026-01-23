@@ -1,3 +1,4 @@
+using Fhi.Security.Cryptography.Certificates;
 using Fhi.Security.Cryptography.CLI.Commands.Extensions;
 using Microsoft.Extensions.Hosting;
 using System.CommandLine;
@@ -35,18 +36,26 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateCertificate
                 "Directory to store the generated certificates",
                 isRequired: false);
 
+            var validityMonthsOption = generateCertCommand.CreateIntOption(
+                GenerateCertificateParameterNames.ValidityMonths.Long,
+                GenerateCertificateParameterNames.ValidityMonths.Short,
+                "Number of months the certificate is valid",
+                defaultValue: Certificate.DefaultValidityMonths);
+
             generateCertCommand.SetAction((ParseResult parseResult) =>
             {
                 var certificateCommonName = parseResult.GetValue(certificateCommonNameOption);
                 var certificatePassword = parseResult.GetValue(certificatePasswordOption);
                 var certificateDirectory = parseResult.GetValue(certificateDirectoryOption);
+                var validityMonths = parseResult.GetValue(validityMonthsOption);
 
                 var parameters = new GenerateCertificateParameters
                 {
                     // TODO: fix "may be null"
                     CertificateCommonName = certificateCommonName!,
                     CertificatePassword = certificatePassword!,
-                    CertificateDirectory = certificateDirectory
+                    CertificateDirectory = certificateDirectory,
+                    ValidityMonths = validityMonths
                 };
 
                 _commandHandler.Execute(parameters);

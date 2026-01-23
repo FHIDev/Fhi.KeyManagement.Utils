@@ -45,5 +45,27 @@ namespace Fhi.Security.Cryptography.CLI.Commands.Extensions
             command.Options.Add(option);
             return option;
         }
+
+        public static Option<int> CreateIntOption(
+            this Command command,
+            string longName,
+            string shortName,
+            string description,
+            int defaultValue)
+        {
+            var option = new Option<int>(
+                name: $"--{longName}"
+            )
+            {
+                Description = description,
+                Required = false
+            };
+
+            option.Aliases.Add($"-{shortName}");
+            option.DefaultValueFactory = _ => defaultValue;
+
+            command.Options.Add(option);
+            return option;
+        }
     }
 }
