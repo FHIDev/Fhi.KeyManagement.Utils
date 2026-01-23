@@ -543,7 +543,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=f766f682">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e3f6da2d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -590,8 +590,9 @@ fhi-cryptography generatecertificate --CertificateCommonName $certificateCommonN
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="command">Command<a class="anchor-link" href="#command">¶</a></h2><pre><code> fhi-cryptography generatecertificate --CertificateCommonName &lt;NAME&gt; --CertificatePassword &lt;PASSWORD&gt; --CertificateDirectory &lt;PATH&gt;
+<h2 id="command">Command<a class="anchor-link" href="#command">¶</a></h2><pre><code> fhi-cryptography generatecertificate --CertificateCommonName &lt;NAME&gt; --CertificatePassword &lt;PASSWORD&gt; --CertificateDirectory &lt;PATH&gt; [--ValidityMonths &lt;MONTHS&gt;]
 </code></pre>
+<p>By default, the certificate is valid for <strong>24 months</strong>. Use <code>ValidityMonths</code> to customize the validity period.</p>
 <h2 id="parameters">Parameters<a class="anchor-link" href="#parameters">¶</a></h2><table>
 <thead>
 <tr>
@@ -623,6 +624,13 @@ fhi-cryptography generatecertificate --CertificateCommonName $certificateCommonN
 <td>Path to where private and public key will be stored.</td>
 <td><b>No</b></td>
 <td><code>"C:\\temp"</code></td>
+</tr>
+<tr>
+<td>ValidityMonths</td>
+<td>vm</td>
+<td>Number of months the certificate is valid. Default: 24</td>
+<td><b>No</b></td>
+<td><code>18</code></td>
 </tr>
 </tbody>
 </table>
