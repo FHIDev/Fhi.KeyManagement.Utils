@@ -25,7 +25,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions
             if (!string.IsNullOrWhiteSpace(directValue))
             {
                 logger.LogInformation("{keyLabel} provided directly.", keyLabel);
-                return UnescapeJsonIfNeeded(directValue.Trim());
+                return UnescapeJson(directValue.Trim());
             }
 
             if (!string.IsNullOrWhiteSpace(filePath))
@@ -44,7 +44,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions
         /// Does NOT unescape valid JSON that contains escaped chars within values,
         /// e.g., {"d":"quote-\"here"} stays unchanged.
         /// </summary>
-        private static string UnescapeJsonIfNeeded(string input)
+        private static string UnescapeJson(string input)
         {
             // Check for {\" pattern (shell-escaped opening brace+quote)
             if (input.StartsWith("{\\\""))
