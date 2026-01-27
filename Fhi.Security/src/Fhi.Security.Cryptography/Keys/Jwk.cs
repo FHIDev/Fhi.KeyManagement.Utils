@@ -13,6 +13,15 @@ namespace Fhi.Security.Cryptography.Jwks
     public record JwkKeyPair(string PublicKey, string PrivateKey);
 
     /// <summary>
+    /// Output format constants for JWK key pair serialization.
+    /// </summary>
+    public static class OutputFormats
+    {
+        public const string Json = "json";
+        public const string Base64 = "base64";
+    }
+
+    /// <summary>
     /// Public class that exposes methods to generate Jwk
     /// </summary>
     public static class JWK

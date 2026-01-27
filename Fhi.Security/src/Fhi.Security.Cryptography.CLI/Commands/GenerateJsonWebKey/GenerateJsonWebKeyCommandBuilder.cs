@@ -1,5 +1,6 @@
 using System.CommandLine;
 using Fhi.Security.Cryptography.CLI.Commands.Extensions;
+using Fhi.Security.Cryptography.Jwks;
 using Microsoft.Extensions.Hosting;
 
 namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
@@ -35,17 +36,19 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                 "Custom Kid value to use in the generated keys",
                 isRequired: false);
 
-            var keyBase64Option = generateJsonWebKeyCommand.CreateBoolOption(
-                GenerateJsonWebKeyParameterNames.KeyBase64.Long,
-                GenerateJsonWebKeyParameterNames.KeyBase64.Short,
-                "Output the JWK content as base64-encoded string");
+            var outputFormatOption = generateJsonWebKeyCommand.CreateStringOption(
+                GenerateJsonWebKeyParameterNames.OutputFormat.Long,
+                GenerateJsonWebKeyParameterNames.OutputFormat.Short,
+                "Output format: 'json' (default) or 'base64' for base64-encoded content",
+                isRequired: false);
+            outputFormatOption.AcceptOnlyFromAmong(OutputFormats.Json, OutputFormats.Base64);
 
             generateJsonWebKeyCommand.SetAction((ParseResult parseResult) =>
             {
                 var keyFileNamePrefix = parseResult.GetValue(keyFileNamePrefixOption);
                 var keyDirectory = parseResult.GetValue(keyDirectoryOption);
                 var keyCustomKid = parseResult.GetValue(keyCustomKidOption);
-                var keyBase64 = parseResult.GetValue(keyBase64Option);
+                var outputFormat = parseResult.GetValue(outputFormatOption);
 
                 var parameters = new GenerateJsonWebKeyParameters
                 {
@@ -53,7 +56,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                     KeyFileNamePrefix = keyFileNamePrefix!,
                     KeyDirectory = keyDirectory,
                     KeyCustomKid = keyCustomKid,
-                    KeyBase64 = keyBase64
+                    OutputFormat = outputFormat ?? OutputFormats.Json
                 };
 
                 _commandHandler.Execute(parameters);

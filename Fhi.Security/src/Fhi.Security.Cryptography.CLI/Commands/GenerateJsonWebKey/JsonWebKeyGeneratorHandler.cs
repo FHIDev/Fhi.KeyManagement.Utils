@@ -13,8 +13,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         /// <summary>
         /// Generates private and public key.
         /// Stores in executing directory if path not specified.
-        /// Private key will be named FileName_private.json (or .txt if base64 encoded)
-        /// Public key will be named FileName_public.json (or .txt if base64 encoded)
+        /// Private key will be named FileName_private.json (or .txt if base64 output format)
+        /// Public key will be named FileName_public.json (or .txt if base64 output format)
         /// </summary>
         public void Execute(GenerateJsonWebKeyParameters parameters)
         {
@@ -27,15 +27,17 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 
             var keyPair = JWK.Create(kid: parameters.KeyCustomKid);
 
-            var privateKeyContent = parameters.KeyBase64
+            var isBase64 = string.Equals(parameters.OutputFormat, OutputFormats.Base64, StringComparison.OrdinalIgnoreCase);
+
+            var privateKeyContent = isBase64
                 ? Convert.ToBase64String(Encoding.UTF8.GetBytes(keyPair.PrivateKey))
                 : keyPair.PrivateKey;
 
-            var publicKeyContent = parameters.KeyBase64
+            var publicKeyContent = isBase64
                 ? Convert.ToBase64String(Encoding.UTF8.GetBytes(keyPair.PublicKey))
                 : keyPair.PublicKey;
 
-            var fileExtension = parameters.KeyBase64 ? "txt" : "json";
+            var fileExtension = isBase64 ? "txt" : "json";
             var privateKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_private.{fileExtension}");
             var publicKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_public.{fileExtension}");
 

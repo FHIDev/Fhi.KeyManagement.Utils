@@ -1,3 +1,5 @@
+using Fhi.Security.Cryptography.Jwks;
+
 namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 {
     /// <summary>
@@ -5,7 +7,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
     /// </summary>
     /// <param name="Long">The long form option name</param>
     /// <param name="Short">The short form option name</param>
-    public record GenerateJsonWebKeyOptionNames(string Long, string Short);
+    internal record GenerateJsonWebKeyOptionNames(string Long, string Short);
 
     internal static class GenerateJsonWebKeyParameterNames
     {
@@ -13,7 +15,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public static readonly GenerateJsonWebKeyOptionNames KeyFileNamePrefix = new("KeyFileNamePrefix", "n");
         public static readonly GenerateJsonWebKeyOptionNames KeyDirectory = new("KeyDirectory", "d");
         public static readonly GenerateJsonWebKeyOptionNames KeyCustomKid = new("KeyCustomKid", "k");
-        public static readonly GenerateJsonWebKeyOptionNames KeyBase64 = new("KeyBase64", "b64");
+        public static readonly GenerateJsonWebKeyOptionNames OutputFormat = new("OutputFormat", "of");
     }
 
     /// <summary>
@@ -37,8 +39,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public string? KeyCustomKid { get; set; }
 
         /// <summary>
-        /// Output the JWK content as base64-encoded string
+        /// Output format: "json" (default) or "base64" for base64-encoded content
         /// </summary>
-        public bool KeyBase64 { get; set; }
+        public string OutputFormat { get; set; } = OutputFormats.Json;
     };
 }
