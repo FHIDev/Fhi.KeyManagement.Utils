@@ -543,7 +543,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=58ee2279">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=f99b6007">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -561,19 +561,21 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="n">dotnet</span> <span class="n">tool</span> <span class="n">install</span> <span class="p">-</span><span class="n">-global</span> <span class="n">Fhi</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="nb">CLI </span><span class="p">-</span><span class="n">-version</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0-beta1</span>
+<div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="c"># Ensure you have installed .NET SDK versions 9.x or 10.x before installing tool</span>
+<span class="n">dotnet</span> <span class="n">tool</span> <span class="n">install</span> <span class="p">-</span><span class="n">-global</span> <span class="n">Fhi</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="nb">CLI</span>
 
-<span class="nv">$keyFileName</span> <span class="p">=</span> <span class="s2">""</span>
-<span class="nv">$keyDirectory</span> <span class="p">=</span> <span class="s2">""</span>
-<span class="nv">$keyCustomKid</span> <span class="p">=</span> <span class="s2">""</span>
+<span class="nv">$keyFileName</span> <span class="p">=</span> <span class="s2">"KeyName"</span>
+<span class="nv">$keyDirectory</span> <span class="p">=</span> <span class="s2">"C:\Keys\test1"</span>
+<span class="nv">$keyCustomKid</span> <span class="p">=</span> <span class="s2">"CustomKid1234"</span>
 
 <span class="n">fhi-cryptography</span> <span class="n">generatejsonwebkey</span> <span class="p">-</span><span class="n">-KeyFileNamePrefix</span> <span class="nv">$keyFileName</span> <span class="p">-</span><span class="n">-KeyDirectory</span> <span class="nv">$keyDirectory</span> <span class="p">-</span><span class="n">-KeyCustomKid</span> <span class="nv">$keyCustomKid</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">dotnet tool install --global Fhi.Security.Cryptography.CLI --version 1.0.0-beta1
+<div class="clipboard-copy-txt" id="cell-1"># Ensure you have installed .NET SDK versions 9.x or 10.x before installing tool
+dotnet tool install --global Fhi.Security.Cryptography.CLI
 
-$keyFileName = ""
-$keyDirectory = ""
-$keyCustomKid = ""
+$keyFileName = "KeyName"
+$keyDirectory = "C:\Keys\test1"
+$keyCustomKid = "CustomKid1234"
 
 fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirectory $keyDirectory --KeyCustomKid $keyCustomKid</div>
 </div>

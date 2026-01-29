@@ -543,7 +543,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=aa2e0edc">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5274b540">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -561,7 +561,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="n">dotnet</span> <span class="n">tool</span> <span class="n">install</span> <span class="p">-</span><span class="n">-global</span> <span class="n">Fhi</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="nb">CLI </span><span class="p">-</span><span class="n">-prerelease</span>
+<div class="highlight-ipynb hl-PowerShell"><pre><span></span><span class="c"># Ensure you have installed .NET SDK versions 9.x or 10.x before installing tool</span>
+<span class="n">dotnet</span> <span class="n">tool</span> <span class="n">install</span> <span class="p">-</span><span class="n">-global</span> <span class="n">Fhi</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="nb">CLI</span>
 
 <span class="nv">$certificateCommonName</span> <span class="p">=</span> <span class="s2">"CertName"</span>
 <span class="nv">$certificatePassword</span> <span class="p">=</span> <span class="s2">"CertPw123!"</span>
@@ -570,7 +571,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <span class="n">fhi-cryptography</span> <span class="n">generatecertificate</span> <span class="p">-</span><span class="n">-CertificateCommonName</span> <span class="nv">$certificateCommonName</span> <span class="p">-</span><span class="n">-CertificatePassword</span> <span class="nv">$certificatePassword</span> <span class="p">-</span><span class="n">-CertificateDirectory</span> <span class="nv">$certificateDirectory</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">dotnet tool install --global Fhi.Security.Cryptography.CLI --prerelease
+<div class="clipboard-copy-txt" id="cell-1"># Ensure you have installed .NET SDK versions 9.x or 10.x before installing tool
+dotnet tool install --global Fhi.Security.Cryptography.CLI
 
 $certificateCommonName = "CertName"
 $certificatePassword = "CertPw123!"
