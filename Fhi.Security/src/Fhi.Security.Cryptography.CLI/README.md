@@ -7,6 +7,12 @@ See further documentation in the official [wiki](https://fhidev.github.io/Fhi.Ke
 
 ---
 
+## Prerequisites
+
+.NET SDK version 9.x or 10.x is required to install and use the Fhi.Cryptography tool.
+
+---
+
 ## Features
 
 - Generate RSA-based JWK key pairs (public and private).
