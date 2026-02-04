@@ -27,7 +27,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 
             var keyPair = JWK.Create(kid: parameters.KeyCustomKid);
 
-            var isBase64 = string.Equals(parameters.OutputFormat, OutputFormats.Base64, StringComparison.OrdinalIgnoreCase);
+            var isBase64 = string.Equals(parameters.OutputTransform, OutputTransform.Base64, StringComparison.OrdinalIgnoreCase);
 
             var privateKeyContent = isBase64
                 ? Convert.ToBase64String(Encoding.UTF8.GetBytes(keyPair.PrivateKey))

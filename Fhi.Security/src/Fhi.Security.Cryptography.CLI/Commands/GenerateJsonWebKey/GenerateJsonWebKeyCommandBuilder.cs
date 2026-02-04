@@ -36,19 +36,19 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                 "Custom Kid value to use in the generated keys",
                 isRequired: false);
 
-            var outputFormatOption = generateJsonWebKeyCommand.CreateStringOption(
-                GenerateJsonWebKeyParameterNames.OutputFormat.Long,
-                GenerateJsonWebKeyParameterNames.OutputFormat.Short,
-                "Output format: 'json' (default) or 'base64' for base64-encoded content",
+            var outputTransformOption = generateJsonWebKeyCommand.CreateStringOption(
+                GenerateJsonWebKeyParameterNames.OutputTransform.Long,
+                GenerateJsonWebKeyParameterNames.OutputTransform.Short,
+                "Output transform: 'jsonEscape' (default) or 'base64' for base64-encoded content",
                 isRequired: false);
-            outputFormatOption.AcceptOnlyFromAmong(OutputFormats.Json, OutputFormats.Base64);
+            outputTransformOption.AcceptOnlyFromAmong(OutputTransform.JsonEscape, OutputTransform.Base64);
 
             generateJsonWebKeyCommand.SetAction((ParseResult parseResult) =>
             {
                 var keyFileNamePrefix = parseResult.GetValue(keyFileNamePrefixOption);
                 var keyDirectory = parseResult.GetValue(keyDirectoryOption);
                 var keyCustomKid = parseResult.GetValue(keyCustomKidOption);
-                var outputFormat = parseResult.GetValue(outputFormatOption);
+                var outputTransform = parseResult.GetValue(outputTransformOption);
 
                 var parameters = new GenerateJsonWebKeyParameters
                 {
@@ -56,7 +56,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                     KeyFileNamePrefix = keyFileNamePrefix!,
                     KeyDirectory = keyDirectory,
                     KeyCustomKid = keyCustomKid,
-                    OutputFormat = outputFormat ?? OutputFormats.Json
+                    OutputTransform = outputTransform ?? OutputTransform.JsonEscape
                 };
 
                 _commandHandler.Execute(parameters);

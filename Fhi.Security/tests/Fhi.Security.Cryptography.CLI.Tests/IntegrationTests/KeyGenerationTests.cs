@@ -131,9 +131,9 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
             }
         }
 
-        [TestCase("--OutputFormat", OutputFormats.Base64)]
-        [TestCase("-of", OutputFormats.Base64)]
-        public async Task GIVEN_GenerateJsonWebKeys_WHEN_Base64OutputFormat_THEN_OutputBase64EncodedContent(string formatOption, string formatValue)
+        [TestCase("--OutputTransform", OutputTransform.Base64)]
+        [TestCase("-ot", OutputTransform.Base64)]
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_Base64OutputTransform_THEN_OutputBase64EncodedContent(string formatOption, string formatValue)
         {
             var fileHandlerMock = new FileHandlerMock();
             var fakeLogProvider = new FakeLoggerProvider();
@@ -193,7 +193,7 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
         }
 
         [Test]
-        public async Task GIVEN_GenerateJsonWebKeys_WHEN_OutputFormatOmitted_THEN_DefaultsToJsonOutput()
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_OutputTransformOmitted_THEN_DefaultsToJsonOutput()
         {
             var fileHandlerMock = new FileHandlerMock();
             var fakeLogProvider = new FakeLoggerProvider();

@@ -15,7 +15,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public static readonly GenerateJsonWebKeyOptionNames KeyFileNamePrefix = new("KeyFileNamePrefix", "n");
         public static readonly GenerateJsonWebKeyOptionNames KeyDirectory = new("KeyDirectory", "d");
         public static readonly GenerateJsonWebKeyOptionNames KeyCustomKid = new("KeyCustomKid", "k");
-        public static readonly GenerateJsonWebKeyOptionNames OutputFormat = new("OutputFormat", "of");
+        public static readonly GenerateJsonWebKeyOptionNames OutputTransform = new("OutputTransform", "ot");
     }
 
     /// <summary>
@@ -39,8 +39,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public string? KeyCustomKid { get; set; }
 
         /// <summary>
-        /// Output format: "json" (default) or "base64" for base64-encoded content
+        /// Output transform: "jsonEscape" (default) or "base64" for base64-encoded content
         /// </summary>
-        public string OutputFormat { get; set; } = OutputFormats.Json;
+        public string OutputTransform { get; set; } = Jwks.OutputTransform.JsonEscape;
     };
 }
