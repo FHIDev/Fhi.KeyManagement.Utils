@@ -39,8 +39,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public string? KeyCustomKid { get; set; }
 
         /// <summary>
-        /// Output transform: "jsonEscape" (default) or "base64" for base64-encoded content
+        /// Output transform: JsonEscape (default) or Base64 for base64-encoded content
         /// </summary>
-        public string OutputTransform { get; set; } = Jwks.OutputTransform.JsonEscape;
+        public OutputTransformType OutputTransform { get; set; } = OutputTransformType.JsonEscape;
     };
 }

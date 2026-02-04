@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using Fhi.Security.Cryptography.CLI.Services;
 using Fhi.Security.Cryptography.Jwks;
 using Microsoft.Extensions.Logging;
@@ -13,8 +14,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         /// <summary>
         /// Generates private and public key.
         /// Stores in executing directory if path not specified.
-        /// Private key will be named FileName_private.json (or .txt if base64 output format)
-        /// Public key will be named FileName_public.json (or .txt if base64 output format)
+        /// File extension is .json for jsonEscape transform, .txt for base64 transform.
         /// </summary>
         public void Execute(GenerateJsonWebKeyParameters parameters)
         {
@@ -27,17 +27,10 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 
             var keyPair = JWK.Create(kid: parameters.KeyCustomKid);
 
-            var isBase64 = string.Equals(parameters.OutputTransform, OutputTransform.Base64, StringComparison.OrdinalIgnoreCase);
+            var privateKeyContent = ApplyTransform(keyPair.PrivateKey, parameters.OutputTransform);
+            var publicKeyContent = ApplyTransform(keyPair.PublicKey, parameters.OutputTransform);
 
-            var privateKeyContent = isBase64
-                ? Convert.ToBase64String(Encoding.UTF8.GetBytes(keyPair.PrivateKey))
-                : keyPair.PrivateKey;
-
-            var publicKeyContent = isBase64
-                ? Convert.ToBase64String(Encoding.UTF8.GetBytes(keyPair.PublicKey))
-                : keyPair.PublicKey;
-
-            var fileExtension = isBase64 ? "txt" : "json";
+            var fileExtension = parameters.OutputTransform == OutputTransformType.Base64 ? "txt" : "json";
             var privateKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_private.{fileExtension}");
             var publicKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_public.{fileExtension}");
 
@@ -46,6 +39,16 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 
             _logger.LogInformation("Private key saved: {@PrivateKeyPath}", privateKeyPath);
             _logger.LogInformation("Public key saved: {@PublicKeyPath}", publicKeyPath);
+        }
+
+        private static string ApplyTransform(string content, OutputTransformType transform)
+        {
+            return transform switch
+            {
+                OutputTransformType.Base64 => Convert.ToBase64String(Encoding.UTF8.GetBytes(content)),
+                OutputTransformType.JsonEscape => JsonSerializer.Serialize(content),
+                _ => throw new ArgumentOutOfRangeException(nameof(transform), transform, "Unknown output transform")
+            };
         }
     }
 }

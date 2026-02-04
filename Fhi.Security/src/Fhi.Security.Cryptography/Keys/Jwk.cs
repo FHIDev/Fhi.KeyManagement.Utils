@@ -13,12 +13,21 @@ namespace Fhi.Security.Cryptography.Jwks
     public record JwkKeyPair(string PublicKey, string PrivateKey);
 
     /// <summary>
-    /// Output transform constants for JWK key pair serialization.
+    /// Output transform types for JWK key pair serialization.
     /// </summary>
-    public static class OutputTransform
+    public enum OutputTransformType
     {
-        public const string JsonEscape = "jsonEscape";
-        public const string Base64 = "base64";
+        JsonEscape,
+        Base64
+    }
+
+    public static class OutputTransformTypeExtensions
+    {
+        public static string ToCamelCase(this OutputTransformType type)
+        {
+            var name = type.ToString();
+            return char.ToLowerInvariant(name[0]) + name[1..];
+        }
     }
 
     /// <summary>

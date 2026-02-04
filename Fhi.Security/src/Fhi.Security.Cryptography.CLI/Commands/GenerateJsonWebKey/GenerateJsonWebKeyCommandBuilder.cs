@@ -39,16 +39,21 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
             var outputTransformOption = generateJsonWebKeyCommand.CreateStringOption(
                 GenerateJsonWebKeyParameterNames.OutputTransform.Long,
                 GenerateJsonWebKeyParameterNames.OutputTransform.Short,
-                "Output transform: 'jsonEscape' (default) or 'base64' for base64-encoded content",
+                $"Output transform: '{OutputTransformType.JsonEscape.ToCamelCase()}' (default) or '{OutputTransformType.Base64.ToCamelCase()}' for base64-encoded content",
                 isRequired: false);
-            outputTransformOption.AcceptOnlyFromAmong(OutputTransform.JsonEscape, OutputTransform.Base64);
+            outputTransformOption.AcceptOnlyFromAmong(
+                OutputTransformType.JsonEscape.ToCamelCase(),
+                OutputTransformType.Base64.ToCamelCase());
 
             generateJsonWebKeyCommand.SetAction((ParseResult parseResult) =>
             {
                 var keyFileNamePrefix = parseResult.GetValue(keyFileNamePrefixOption);
                 var keyDirectory = parseResult.GetValue(keyDirectoryOption);
                 var keyCustomKid = parseResult.GetValue(keyCustomKidOption);
-                var outputTransform = parseResult.GetValue(outputTransformOption);
+                var outputTransformString = parseResult.GetValue(outputTransformOption);
+                var outputTransform = string.IsNullOrEmpty(outputTransformString)
+                    ? OutputTransformType.JsonEscape
+                    : Enum.Parse<OutputTransformType>(outputTransformString, ignoreCase: true);
 
                 var parameters = new GenerateJsonWebKeyParameters
                 {
@@ -56,7 +61,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                     KeyFileNamePrefix = keyFileNamePrefix!,
                     KeyDirectory = keyDirectory,
                     KeyCustomKid = keyCustomKid,
-                    OutputTransform = outputTransform ?? OutputTransform.JsonEscape
+                    OutputTransform = outputTransform
                 };
 
                 _commandHandler.Execute(parameters);
