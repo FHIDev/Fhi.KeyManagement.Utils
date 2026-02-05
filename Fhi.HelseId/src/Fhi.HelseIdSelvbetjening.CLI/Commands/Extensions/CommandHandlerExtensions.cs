@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Fhi.HelseIdSelvbetjening.CLI.Services;
 using Microsoft.Extensions.Logging;
 
@@ -39,21 +40,19 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions
         }
 
         /// <summary>
-        /// Unescapes terminal/shell-escaped JSON where the entire structure has escaped quotes.
-        /// Handles input like: {\"kid\":\"test\"} -> {"kid":"test"}
-        /// Does NOT unescape valid JSON that contains escaped chars within values,
-        /// e.g., {"d":"quote-\"here"} stays unchanged.
+        /// Unescapes JSON string escape sequences by deserializing the input as a JSON string value.
+        /// <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/character-encoding"/>
         /// </summary>
         private static string UnescapeJson(string input)
         {
-            // Check for {\" pattern (shell-escaped opening brace+quote)
-            if (input.StartsWith("{\\\""))
+            try
             {
-                return input
-                    .Replace("\\\"", "\"")
-                    .Replace("\\\\", "\\");
+                return JsonSerializer.Deserialize<string>($"\"{input}\"")!;
             }
-            return input;
+            catch (JsonException)
+            {
+                return input;
+            }
         }
     }
 }

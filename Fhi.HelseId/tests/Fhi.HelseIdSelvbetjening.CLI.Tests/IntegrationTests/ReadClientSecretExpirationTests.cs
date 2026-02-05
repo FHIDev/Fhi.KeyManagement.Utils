@@ -11,12 +11,19 @@ namespace Fhi.HelseIdSelvbetjening.CLI.IntegrationTests
 {
     public class ReadClientSecretExpirationTests
     {
+        /// <summary>
+        /// Unicode escape sequence for the double quote character (").
+        /// The first JWKs from HelseId contained unicode escaped quotes.
+        /// </summary>
+        private const string UnicodeEscapedQuote = "\\u0022";
+
         [TestCase("{\n  \"kid\": \"test-kid\",\n  \"kty\": \"RSA\",\n  \"d\": \"test-d-value\",\n  \"n\": \"test-n-value\",\n  \"e\": \"AQAB\"\n}")]
         [TestCase("{\"d\":\"test-kid\",\"e\":\"AQAB\",\"kid\":\"test-kid\",\"kty\":\"RSA\",\"n\":\"test-n-value\"}")]
         [TestCase("{ \"kid\": \"test-kid\", \"kty\": \"RSA\", \"d\": \"test-data\", \"n\": \"test-modulus\", \"e\": \"AQAB\" }")]
         [TestCase(@"{""kid"":""test-kid"",""kty"":""RSA"",""d"":""test-with-special-chars-!@#$%^&*()"",""n"":""test-n-value"",""e"":""AQAB""}")]
         [TestCase(@"{""kid"":""test-kid"",""kty"":""RSA"",""d"":""data-with-quotes-\""and\""-backslashes-\\"",""n"":""test-n-value"",""e"":""AQAB""}")]
         [TestCase("{\\\"kid\\\":\\\"test-kid\\\",\\\"kty\\\":\\\"RSA\\\",\\\"d\\\":\\\"test-d-value\\\",\\\"n\\\":\\\"test-n-value\\\",\\\"e\\\":\\\"AQAB\\\"}")]
+        [TestCase("{" + UnicodeEscapedQuote + "kid" + UnicodeEscapedQuote + ":" + UnicodeEscapedQuote + "test-kid" + UnicodeEscapedQuote + "," + UnicodeEscapedQuote + "kty" + UnicodeEscapedQuote + ":" + UnicodeEscapedQuote + "RSA" + UnicodeEscapedQuote + "," + UnicodeEscapedQuote + "d" + UnicodeEscapedQuote + ":" + UnicodeEscapedQuote + "test-d-value" + UnicodeEscapedQuote + "," + UnicodeEscapedQuote + "n" + UnicodeEscapedQuote + ":" + UnicodeEscapedQuote + "test-n-value" + UnicodeEscapedQuote + "," + UnicodeEscapedQuote + "e" + UnicodeEscapedQuote + ":" + UnicodeEscapedQuote + "AQAB" + UnicodeEscapedQuote + "}")]
         public async Task ReadClientSecretExpiration_ValidDirectJwkArgument_ExitCode0(string jwk)
         {
             var fakeLogProvider = new FakeLoggerProvider();
