@@ -11,7 +11,6 @@
     <ToolCommandName>fhi-cryptography</ToolCommandName>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>fhi.png</PackageIcon>
-    <Version>1.1.0</Version>
     <Description>Command line tool for cryptography generation and management by FHI.</Description>
     <PackageTags>cli;configuration;keyManagement;jwk;jsonwebkey;certificate;pem</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
