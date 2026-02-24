@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using Fhi.Security.Cryptography.CLI.Services;
 using Fhi.Security.Cryptography.Jwks;
 using Microsoft.Extensions.Logging;
@@ -12,10 +14,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         /// <summary>
         /// Generates private and public key.
         /// Stores in executing directory if path not specified.
-        /// privateKey will be named FileName_private.json
-        /// privateKey will be named FileName_public.json 
+        /// File extension is .json for jsonEscape transform, .txt for base64 transform.
         /// </summary>
-        /// <returns></returns>
         public void Execute(GenerateJsonWebKeyParameters parameters)
         {
             var keyPath = parameters.KeyDirectory ?? Environment.CurrentDirectory;
@@ -27,14 +27,28 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 
             var keyPair = JWK.Create(kid: parameters.KeyCustomKid);
 
-            var privateKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_private.json");
-            var publicKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_public.json");
+            var privateKeyContent = ApplyTransform(keyPair.PrivateKey, parameters.OutputTransform);
+            var publicKeyContent = ApplyTransform(keyPair.PublicKey, parameters.OutputTransform);
 
-            _fileHandler.WriteAllText(privateKeyPath, keyPair.PrivateKey);
-            _fileHandler.WriteAllText(publicKeyPath, keyPair.PublicKey);
+            var fileExtension = parameters.OutputTransform == OutputTransformType.Base64 ? "txt" : "json";
+            var privateKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_private.{fileExtension}");
+            var publicKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_public.{fileExtension}");
+
+            _fileHandler.WriteAllText(privateKeyPath, privateKeyContent);
+            _fileHandler.WriteAllText(publicKeyPath, publicKeyContent);
 
             _logger.LogInformation("Private key saved: {@PrivateKeyPath}", privateKeyPath);
             _logger.LogInformation("Public key saved: {@PublicKeyPath}", publicKeyPath);
+        }
+
+        private static string ApplyTransform(string content, OutputTransformType transform)
+        {
+            return transform switch
+            {
+                OutputTransformType.Base64 => Convert.ToBase64String(Encoding.UTF8.GetBytes(content)),
+                OutputTransformType.JsonEscape => JsonSerializer.Serialize(content),
+                _ => throw new ArgumentOutOfRangeException(nameof(transform), transform, "Unknown output transform")
+            };
         }
     }
 }

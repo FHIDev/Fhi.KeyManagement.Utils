@@ -1,11 +1,13 @@
+using Fhi.Security.Cryptography.Jwks;
+
 namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 {
     /// <summary>
-    /// 
+    /// Represents long and short option names for command-line arguments.
     /// </summary>
-    /// <param name="Long"></param>
-    /// <param name="Short"></param>
-    public record GenerateJsonWebKeyOptionNames(string Long, string Short);
+    /// <param name="Long">The long form option name</param>
+    /// <param name="Short">The short form option name</param>
+    internal record GenerateJsonWebKeyOptionNames(string Long, string Short);
 
     internal static class GenerateJsonWebKeyParameterNames
     {
@@ -13,6 +15,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public static readonly GenerateJsonWebKeyOptionNames KeyFileNamePrefix = new("KeyFileNamePrefix", "n");
         public static readonly GenerateJsonWebKeyOptionNames KeyDirectory = new("KeyDirectory", "d");
         public static readonly GenerateJsonWebKeyOptionNames KeyCustomKid = new("KeyCustomKid", "k");
+        public static readonly GenerateJsonWebKeyOptionNames OutputTransform = new("OutputTransform", "ot");
     }
 
     /// <summary>
@@ -34,5 +37,10 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         /// Custom Kid thats present on both public and private key
         /// </summary>
         public string? KeyCustomKid { get; set; }
+
+        /// <summary>
+        /// Output transform: JsonEscape (default) or Base64 for base64-encoded content
+        /// </summary>
+        public OutputTransformType OutputTransform { get; set; } = OutputTransformType.JsonEscape;
     };
 }

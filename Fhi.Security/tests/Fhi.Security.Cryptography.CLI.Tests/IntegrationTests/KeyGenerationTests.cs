@@ -1,5 +1,8 @@
-using Fhi.Security.Cryptography.CLI.IntegrationTests.Setup;
+using System.Text;
+using System.Text.Json;
 using Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey;
+using Fhi.Security.Cryptography.CLI.IntegrationTests.Setup;
+using Fhi.Security.Cryptography.Jwks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;
 
@@ -22,9 +25,9 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
             var args = new List<string>
             {
                 GenerateJsonWebKeyParameterNames.CommandName,
-                $"{prefixOption}", 
+                $"{prefixOption}",
                 prefixName,
-                $"{directoryPathOption}", 
+                $"{directoryPathOption}",
                 directoryPath
             };
 
@@ -41,14 +44,13 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
 
             var rootCommand = rootCommandBuilder.Build();
             var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
-            var commandLineBuilder = new CommandLineBuilder();
 
             var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
 
             using (Assert.EnterMultipleScope())
             {
                 Assert.That(fileHandlerMock.Files, Has.Count.EqualTo(2));
-                Assert.That(exitCode, Is.EqualTo(0));
+                Assert.That(exitCode, Is.Zero);
 
                 var logs = fakeLogProvider.Collector?.GetSnapshot().Select(x => x.Message).ToList();
                 Assert.That(logs!, Does.Contain($"Private key saved: {Path.Combine(directoryPath, prefixName)}_private.json"));
@@ -69,9 +71,9 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
             var args = new[]
             {
                 GenerateJsonWebKeyParameterNames.CommandName,
-                "--KeyFileNamePrefix",
+                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}",
                 prefixName,
-                "--KeyDirectory",
+                $"--{GenerateJsonWebKeyParameterNames.KeyDirectory.Long}",
                 directoryPath,
                 "--invalidparameter", "integration_test"
             };
@@ -82,7 +84,6 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
 
             var rootCommand = rootCommandBuilder.Build();
             var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
-            var commandLineBuilder = new CommandLineBuilder();
 
             var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
 
@@ -100,13 +101,13 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
         [Test]
         public async Task GIVEN_GenerateJsonWebKeys_WHEN_PathIsEmpty_THEN_UseCurrentDirectory()
         {
-            var fakeLogProvider = new FakeLoggerProvider();
             var fileHandlerMock = new FileHandlerMock();
+            var fakeLogProvider = new FakeLoggerProvider();
             var args = new[]
             {
                 GenerateJsonWebKeyParameterNames.CommandName,
                 $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", "TestClient",
-                $"--KeyCustomKid", "TESSTSTST"
+                $"--{GenerateJsonWebKeyParameterNames.KeyCustomKid.Long}", "TESSTSTST"
             };
             var rootCommandBuilder = new RootCommandBuilder()
               .WithArgs(args)
@@ -115,8 +116,7 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
 
             var rootCommand = rootCommandBuilder.Build();
             var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
-            var commandLineBuilder = new CommandLineBuilder();
-            
+
             var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
 
             using (Assert.EnterMultipleScope())
@@ -124,11 +124,149 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
                 var expectedPublicKeyPath = Path.Combine(Environment.CurrentDirectory, "TestClient_public.json");
                 var expectedPrivateKeyPath = Path.Combine(Environment.CurrentDirectory, "TestClient_private.json");
                 var logs = fakeLogProvider.Collector?.GetSnapshot().Select(x => x.Message).ToList();
-                Assert.That(exitCode, Is.EqualTo(0));
+                Assert.That(exitCode, Is.Zero);
 
                 Assert.That(logs!, Does.Contain($"Private key saved: {expectedPrivateKeyPath}"));
                 Assert.That(logs!, Does.Contain($"Public key saved: {expectedPublicKeyPath}"));
             }
+        }
+
+        private static readonly object[][] JsonEscapeTransformTestCases =
+        [
+            ["--OutputTransform", OutputTransformType.JsonEscape.ToCamelCase()],
+            ["-ot", OutputTransformType.JsonEscape.ToCamelCase()],
+            ["", ""] // default er jsonEscape
+        ];
+
+        [TestCaseSource(nameof(JsonEscapeTransformTestCases))]
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_JsonEscapeOutputTransform_THEN_OutputJsonEscapedContent(string transformOption, string transformValue)
+        {
+            var fileHandlerMock = new FileHandlerMock();
+            var fakeLogProvider = new FakeLoggerProvider();
+
+            var prefixName = "json_escape_test";
+            var directoryPath = "c:\\temp";
+
+            var args = new List<string>
+            {
+                GenerateJsonWebKeyParameterNames.CommandName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", prefixName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyDirectory.Long}", directoryPath
+            };
+
+            if (!string.IsNullOrWhiteSpace(transformOption))
+            {
+                args.Add(transformOption);
+                args.Add(transformValue);
+            }
+
+            var rootCommandBuilder = new RootCommandBuilder()
+                .WithArgs(args.ToArray())
+                .WithFileHandler(fileHandlerMock)
+                .WithLoggerProvider(fakeLogProvider, LogLevel.Trace);
+
+            var rootCommand = rootCommandBuilder.Build();
+            var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
+
+            var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
+            var expectedPrivateKeyPath = Path.Combine(directoryPath, $"{prefixName}_private.json");
+            var expectedPublicKeyPath = Path.Combine(directoryPath, $"{prefixName}_public.json");
+
+            var privateKeyEscaped = fileHandlerMock.Files[expectedPrivateKeyPath];
+            var publicKeyEscaped = fileHandlerMock.Files[expectedPublicKeyPath];
+
+            var privateKeyJson = JsonSerializer.Deserialize<string>(privateKeyEscaped);
+            var publicKeyJson = JsonSerializer.Deserialize<string>(publicKeyEscaped);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(fileHandlerMock.Files, Has.Count.EqualTo(2));
+                Assert.That(privateKeyJson, Is.Not.Null);
+                Assert.That(publicKeyJson, Is.Not.Null);
+            }
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(privateKeyEscaped, Does.StartWith("\""));
+                Assert.That(privateKeyEscaped, Does.EndWith("\""));
+                Assert.That(publicKeyEscaped, Does.StartWith("\""));
+                Assert.That(publicKeyEscaped, Does.EndWith("\""));
+                
+                using var privateKeyDoc = JsonDocument.Parse(privateKeyJson);
+                using var publicKeyDoc = JsonDocument.Parse(publicKeyJson);
+
+                AssertValidJwkKeyPair(privateKeyDoc, publicKeyDoc);
+            }
+        }
+
+        private static readonly object[][] Base64TransformTestCases =
+        [
+            ["--OutputTransform", OutputTransformType.Base64.ToCamelCase()],
+            ["-ot", OutputTransformType.Base64.ToCamelCase()]
+        ];
+
+        [TestCaseSource(nameof(Base64TransformTestCases))]
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_Base64OutputTransform_THEN_OutputBase64EncodedContent(string transformOption, string transformValue)
+        {
+            var fileHandlerMock = new FileHandlerMock();
+            var fakeLogProvider = new FakeLoggerProvider();
+
+            var prefixName = "base64_test";
+            var directoryPath = "c:\\temp";
+
+            var args = new[]
+            {
+                GenerateJsonWebKeyParameterNames.CommandName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", prefixName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyDirectory.Long}", directoryPath,
+                transformOption, transformValue
+            };
+
+            var rootCommandBuilder = new RootCommandBuilder()
+                .WithArgs(args)
+                .WithFileHandler(fileHandlerMock)
+                .WithLoggerProvider(fakeLogProvider, LogLevel.Trace);
+
+            var rootCommand = rootCommandBuilder.Build();
+            var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
+
+            var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(fileHandlerMock.Files, Has.Count.EqualTo(2));
+
+                var expectedPrivateKeyPath = Path.Combine(directoryPath, $"{prefixName}_private.txt");
+                var expectedPublicKeyPath = Path.Combine(directoryPath, $"{prefixName}_public.txt");
+
+                var logs = fakeLogProvider.Collector?.GetSnapshot().Select(x => x.Message).ToList();
+                Assert.That(logs!, Does.Contain($"Private key saved: {expectedPrivateKeyPath}"));
+                Assert.That(logs!, Does.Contain($"Public key saved: {expectedPublicKeyPath}"));
+
+                // Verify the content is valid base64 that decodes to valid JSON
+                var privateKeyBase64 = fileHandlerMock.Files[expectedPrivateKeyPath];
+                var publicKeyBase64 = fileHandlerMock.Files[expectedPublicKeyPath];
+
+                var privateKeyJson = Encoding.UTF8.GetString(Convert.FromBase64String(privateKeyBase64));
+                var publicKeyJson = Encoding.UTF8.GetString(Convert.FromBase64String(publicKeyBase64));
+
+                // Verify it's valid JSON by parsing
+                using var privateKeyDoc = JsonDocument.Parse(privateKeyJson);
+                using var publicKeyDoc = JsonDocument.Parse(publicKeyJson);
+
+                // Verify JWK structure
+                AssertValidJwkKeyPair(privateKeyDoc, publicKeyDoc);
+            }
+        }
+
+        private static void AssertValidJwkKeyPair(JsonDocument privateKey, JsonDocument publicKey)
+        {
+            Assert.That(privateKey.RootElement.TryGetProperty("kty", out _), Is.True);
+            Assert.That(publicKey.RootElement.TryGetProperty("kty", out _), Is.True);
+            Assert.That(privateKey.RootElement.TryGetProperty("d", out _), Is.True);
+            Assert.That(publicKey.RootElement.TryGetProperty("d", out _), Is.False);
         }
     }
 }
