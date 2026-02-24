@@ -828,7 +828,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5f28a3ea">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6b83647b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -853,7 +853,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="nv">$keyDirectory</span> <span class="p">=</span> <span class="s2">"C:\Keys\test1"</span>
 <span class="nv">$keyCustomKid</span> <span class="p">=</span> <span class="s2">"CustomKid1234"</span>
 
+<span class="c"># Generate keys as JSON files (default)</span>
 <span class="n">fhi-cryptography</span> <span class="n">generatejsonwebkey</span> <span class="p">-</span><span class="n">-KeyFileNamePrefix</span> <span class="nv">$keyFileName</span> <span class="p">-</span><span class="n">-KeyDirectory</span> <span class="nv">$keyDirectory</span> <span class="p">-</span><span class="n">-KeyCustomKid</span> <span class="nv">$keyCustomKid</span>
+
+<span class="c"># Generate keys as base64-encoded content</span>
+<span class="n">fhi-cryptography</span> <span class="n">generatejsonwebkey</span> <span class="p">-</span><span class="n">-KeyFileNamePrefix</span> <span class="nv">$keyFileName</span> <span class="p">-</span><span class="n">-KeyDirectory</span> <span class="nv">$keyDirectory</span> <span class="p">-</span><span class="n">-OutputTransform</span> <span class="n">base64</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-1"># Ensure you have installed .NET SDK versions 9.x or 10.x before installing tool
 dotnet tool install --global Fhi.Security.Cryptography.CLI
@@ -862,7 +866,11 @@ $keyFileName = "KeyName"
 $keyDirectory = "C:\Keys\test1"
 $keyCustomKid = "CustomKid1234"
 
-fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirectory $keyDirectory --KeyCustomKid $keyCustomKid</div>
+# Generate keys as JSON files (default)
+fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirectory $keyDirectory --KeyCustomKid $keyCustomKid
+
+# Generate keys as base64-encoded content
+fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirectory $keyDirectory --OutputTransform base64</div>
 </div>
 </div>
 </div>
@@ -875,7 +883,7 @@ fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirect
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="command">Command<a class="anchor-link" href="#command">¶</a></h2><pre><code> generatejsonwebkey --KeyFileNamePrefix &lt;NAME&gt; --KeyDirectory &lt;PATH&gt; --KeyCustomKid &lt;CUSTOMKID&gt;
+<h2 id="command">Command<a class="anchor-link" href="#command">¶</a></h2><pre><code> generatejsonwebkey --KeyFileNamePrefix &lt;NAME&gt; --KeyDirectory &lt;PATH&gt; --KeyCustomKid &lt;CUSTOMKID&gt; --OutputTransform &lt;TRANSFORM&gt;
 </code></pre>
 <h2 id="parameters">Parameters<a class="anchor-link" href="#parameters">¶</a></h2><table>
 <thead>
@@ -908,6 +916,13 @@ fhi-cryptography generatejsonwebkey --KeyFileNamePrefix $keyFileName --KeyDirect
 <td>Optional value to set a custom Kid inside the keys.</td>
 <td>No</td>
 <td><code>"1234567890"</code></td>
+</tr>
+<tr>
+<td>--OutputTransform</td>
+<td>-ot</td>
+<td>Output transform: <code>jsonEscape</code> (default) or <code>base64</code> for base64-encoded content. When <code>base64</code>, files are saved as <code>.txt</code> instead of <code>.json</code>.</td>
+<td>No</td>
+<td><code>"base64"</code></td>
 </tr>
 </tbody>
 </table>
