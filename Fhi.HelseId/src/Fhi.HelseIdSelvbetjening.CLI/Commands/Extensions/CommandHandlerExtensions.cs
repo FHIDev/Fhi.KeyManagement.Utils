@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Fhi.HelseIdSelvbetjening.CLI.Services;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +26,7 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions
             if (!string.IsNullOrWhiteSpace(directValue))
             {
                 logger.LogInformation("{keyLabel} provided directly.", keyLabel);
-                return directValue;
+                return UnescapeJson(directValue.Trim());
             }
 
             if (!string.IsNullOrWhiteSpace(filePath))
@@ -36,6 +37,22 @@ namespace Fhi.HelseIdSelvbetjening.CLI.Commands.Extensions
 
             logger.LogWarning("{keyLabel} not provided.", keyLabel);
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Unescapes JSON string escape sequences by deserializing the input as a JSON string value.
+        /// <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/character-encoding"/>
+        /// </summary>
+        private static string UnescapeJson(string input)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<string>($"\"{input}\"")!;
+            }
+            catch (JsonException)
+            {
+                return input;
+            }
         }
     }
 }
