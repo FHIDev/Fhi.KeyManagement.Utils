@@ -27,7 +27,7 @@ namespace Fhi.Security.Cryptography.Certificates
 
     /// <summary>
     /// Describes why a certificate entry was skipped during configuration load.
-    /// Passed to the <c>onWarning</c> callback on <see cref="Microsoft.Extensions.Configuration.CertificateConfigurationExtensions"/>.
+    /// Passed to the <c>onValidationError</c> callback on <see cref="Microsoft.Extensions.Configuration.CertificateConfigurationExtensions"/>.
     /// </summary>
     public record CertificateLoadDiagnostic(string ConfigKey, string Identifier, string Reason);
 

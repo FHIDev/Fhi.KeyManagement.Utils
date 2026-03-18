@@ -6,7 +6,7 @@ namespace Fhi.Security.Cryptography.Certificates
     internal sealed class PrivateKeyCertificateStoreConfigurationProvider(
         IReadOnlyList<CertificateSecretEntry> entries,
         ICertificateStore certificateStore,
-        Action<CertificateLoadDiagnostic>? onWarning = null) : ConfigurationProvider
+        Action<CertificateLoadDiagnostic>? onValidationError = null) : ConfigurationProvider
     {
         public override void Load()
         {
@@ -17,50 +17,33 @@ namespace Fhi.Security.Cryptography.Certificates
                 try
                 {
                     var cert = certificateStore.GetCertificate(entry.Identifier);
-
-                    if (cert == null)
-                    {
-                        Warn(entry, "Certificate not found in store.");
-                        continue;
-                    }
-
-                    if (!cert.HasPrivateKey)
-                    {
-                        Warn(entry, "Certificate does not have a private key.");
-                        continue;
-                    }
-
-                    var validationReason = GetValidationFailureReason(cert, entry.KeyUse, utcNow);
+                    var validationReason = Validate(cert, entry.KeyUse, utcNow);
                     if (validationReason != null)
                     {
-                        Warn(entry, validationReason);
+                        Diagnostic(entry, validationReason);
                         continue;
                     }
 
-                    var privateKey = cert.GetRSAPrivateKey()?.ExportRSAPrivateKeyPem();
-                    if (privateKey == null)
-                    {
-                        Warn(entry, "Certificate does not contain a supported private key algorithm (RSA expected).");
-                        continue;
-                    }
-
-                    Data[entry.ConfigKey] = privateKey;
+                    Data[entry.ConfigKey] = cert?.GetRSAPrivateKey()?.ExportRSAPrivateKeyPem();
                 }
                 catch (Exception ex)
                 {
-                    Warn(entry, $"Unexpected error: {ex.Message}");
+                    Diagnostic(entry, $"Unexpected error: {ex.Message}");
                 }
             }
         }
 
-        private void Warn(CertificateSecretEntry entry, string reason)
-            => onWarning?.Invoke(new CertificateLoadDiagnostic(entry.ConfigKey, entry.Identifier, reason));
+        private void Diagnostic(CertificateSecretEntry entry, string reason)
+            => onValidationError?.Invoke(new CertificateLoadDiagnostic(entry.ConfigKey, entry.Identifier, reason));
 
-        private static string? GetValidationFailureReason(X509Certificate2 cert, CertificateKeyUse keyUse, DateTime utcNow)
+        private static string? Validate(X509Certificate2? cert, CertificateKeyUse keyUse, DateTime utcNow)
         {
+            if (cert == null)
+                return "Certificate not found in store.";
+            if (!cert.HasPrivateKey && cert.GetRSAPrivateKey() == null)
+                return "Certificate does not contain a supported private key algorithm (RSA expected).";
             if (cert.NotAfter.ToUniversalTime() < utcNow)
                 return $"Certificate expired on {cert.NotAfter:yyyy-MM-dd}.";
-
             if (cert.NotBefore.ToUniversalTime() > utcNow)
                 return $"Certificate is not valid until {cert.NotBefore:yyyy-MM-dd}.";
 
