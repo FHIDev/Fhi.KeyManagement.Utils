@@ -13,6 +13,7 @@
     <PackageReference Include="NUnit.Analyzers" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" />
+		<PackageReference Include="NSubstitute" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
   </ItemGroup>
 
