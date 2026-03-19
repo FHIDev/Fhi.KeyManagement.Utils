@@ -17,14 +17,19 @@ namespace Fhi.Security.Cryptography.Certificates
                 try
                 {
                     var cert = certificateStore.GetCertificate(entry.Identifier);
-                    var validationReason = Validate(cert, entry.KeyUse, utcNow);
-                    if (validationReason != null)
+                    if (cert != null)
                     {
-                        Diagnostic(entry, validationReason);
-                        continue;
-                    }
+                        var validationReason = Validate(cert, entry.KeyUse, utcNow);
+                        if (validationReason != null)
+                        {
+                            Diagnostic(entry, validationReason);
+                            continue;
+                        }
 
-                    Data[entry.ConfigKey] = cert?.GetRSAPrivateKey()?.ExportRSAPrivateKeyPem();
+                        Data[entry.ConfigKey] = cert.GetRSAPrivateKey()?.ExportRSAPrivateKeyPem();
+                    }
+                    Diagnostic(entry, "Certificate not found in store.");
+
                 }
                 catch (Exception ex)
                 {
@@ -36,10 +41,8 @@ namespace Fhi.Security.Cryptography.Certificates
         private void Diagnostic(CertificateSecretEntry entry, string reason)
             => onValidationError?.Invoke(new CertificateLoadDiagnostic(entry.ConfigKey, entry.Identifier, reason));
 
-        private static string? Validate(X509Certificate2? cert, CertificateKeyUse keyUse, DateTime utcNow)
+        private static string? Validate(X509Certificate2 cert, CertificateKeyUse keyUse, DateTime utcNow)
         {
-            if (cert == null)
-                return "Certificate not found in store.";
             if (!cert.HasPrivateKey && cert.GetRSAPrivateKey() == null)
                 return "Certificate does not contain a supported private key algorithm (RSA expected).";
             if (cert.NotAfter.ToUniversalTime() < utcNow)
