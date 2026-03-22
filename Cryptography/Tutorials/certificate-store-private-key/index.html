@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Loading a private key from the Windows certificate store - FHI HelseID Tools</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../../overrides/readthedocs.css" rel="stylesheet" />
+        <link href="../../../overrides/cards.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Loading a private key from the Windows certificate store";
+        var mkdocs_page_input_path = "Cryptography/Tutorials/certificate-store-private-key.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../..">
+          <img src="../../../logo_small.webp" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Cryptography</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../command-overview/">Cryptography Tool (Jwk)</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Tutorials</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Loading a private key from the Windows certificate store</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#step-1-generate-a-certificate">Step 1 — Generate a certificate</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#step-2-install-the-certificate-in-the-windows-certificate-store">Step 2 — Install the certificate in the Windows certificate store</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#using-powershell">Using powershell</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#using-windows-mmc-certificate-snap-in">Using Windows mmc certificate snap-in</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#step-3-grant-the-service-account-read-access-localmachine-only">Step 3 — Grant the service account read access (LocalMachine only)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#step-4-load-the-private-key-into-iconfiguration">Step 4 — Load the private key into IConfiguration</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#single-key-most-common">Single key (most common)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#multiple-clients">Multiple clients</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#with-dependency-injection">With dependency injection</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#logging-skipped-certificates">Logging skipped certificates</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a>
+    </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Commands</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../commands/generatecertificates/">Generate keys in certificate format Commands</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../commands/generatenewjsonwebkeys/">Generate new Json Web keys Command</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">HelseId</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../HelseId/command-overview/">HelseId Client secrets Tool</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Commands</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../HelseId/commands/readclientsecret/">Read client secret command</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../HelseId/commands/updateclientsecret/">Update client secret command</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">FHI HelseID Tools</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Cryptography</li>
+          <li class="breadcrumb-item">Tutorials</li>
+      <li class="breadcrumb-item active">Loading a private key from the Windows certificate store</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="loading-a-private-key-from-the-windows-certificate-store">Loading a private key from the Windows certificate store</h1>
+<p>This guide covers how to install a certificate in the Windows certificate store and load the private key into <code>IConfiguration</code> using <code>Fhi.Security.Cryptography</code>.</p>
+<p>Typical use cases:</p>
+<ul>
+<li><strong>Client assertion</strong> — signing JWTs for authentication against HelseID or Maskinporten</li>
+<li><strong>Encryption</strong> — encrypting or decrypting data at rest or in transit</li>
+</ul>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<pre><code class="language-xml">&lt;PackageReference Include=&quot;Fhi.Security.Cryptography&quot; Version=&quot;x.y.z&quot; /&gt;
+</code></pre>
+<hr />
+<h2 id="step-1-generate-a-certificate">Step 1 — Generate a certificate</h2>
+<p>Use <code>Fhi.Security.Cryptography.CLI</code> to generate a self-signed certificate. See <a href="../../commands/generatecertificates/"></a></p>
+<p>This produces two files:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MyApp.pfx</code></td>
+<td>Private + public key (PKCS#12), password-protected</td>
+</tr>
+<tr>
+<td><code>MyApp.pem</code></td>
+<td>Public certificate (upload to HelseID/Maskinporten)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-2-install-the-certificate-in-the-windows-certificate-store">Step 2 — Install the certificate in the Windows certificate store</h2>
+<h3 id="using-powershell">Using powershell</h3>
+<p>Open PowerShell <strong>as administrator</strong> (LocalMachine) or as yourself (CurrentUser):</p>
+<pre><code class="language-powershell"># CurrentUser\My — recommended for applications running as your own user
+$cert = Import-PfxCertificate `
+    -FilePath &quot;.\MyApp.pfx&quot; `
+    -CertStoreLocation &quot;Cert:\CurrentUser\My&quot; `
+    -Password (ConvertTo-SecureString &quot;MyPassword&quot; -AsPlainText -Force) `
+    -Exportable   # required so that .NET can export the private key
+
+$cert.Thumbprint   # copy this value
+</code></pre>
+<blockquote>
+<p><strong>Important:</strong> The <code>-Exportable</code> flag is required. Without it .NET cannot export the private key and the configuration value will never be populated.</p>
+</blockquote>
+<p>For services running as <code>NETWORK SERVICE</code> or a dedicated service account:</p>
+<pre><code class="language-powershell"># LocalMachine\My — for Windows services and IIS
+Import-PfxCertificate `
+    -FilePath &quot;.\MyApp.pfx&quot; `
+    -CertStoreLocation &quot;Cert:\LocalMachine\My&quot; `
+    -Password (ConvertTo-SecureString &quot;MyPassword&quot; -AsPlainText -Force) `
+    -Exportable
+</code></pre>
+<h3 id="using-windows-mmc-certificate-snap-in">Using Windows mmc certificate snap-in</h3>
+<p>See <a href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/certificates-and-public-key-infrastructure-pki/install-imported-certificates?source=recommendations#import-the-certificate-into-the-local-computer-store">Import the certificate into the local computer store</a></p>
+<hr />
+<h2 id="step-3-grant-the-service-account-read-access-localmachine-only">Step 3 — Grant the service account read access (LocalMachine only)</h2>
+<p>If the certificate is installed in <code>LocalMachine\My</code> and the service runs as a non-administrator account:</p>
+<pre><code class="language-powershell">$thumbprint    = &quot;&lt;your-thumbprint&gt;&quot;
+$serviceAccount = &quot;DOMAIN\MyServiceAccount&quot;   # or &quot;IIS AppPool\MyAppPool&quot;
+
+$cert     = Get-Item &quot;Cert:\LocalMachine\My\$thumbprint&quot;
+$keyPath  = $cert.PrivateKey.CspKeyContainerInfo.UniqueKeyContainerName
+$fullPath = &quot;$env:ProgramData\Microsoft\Crypto\RSA\MachineKeys\$keyPath&quot;
+
+$acl = Get-Acl $fullPath
+$acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
+    $serviceAccount, &quot;Read&quot;, &quot;Allow&quot;)))
+Set-Acl $fullPath $acl
+</code></pre>
+<hr />
+<h2 id="step-4-load-the-private-key-into-iconfiguration">Step 4 — Load the private key into IConfiguration</h2>
+<h3 id="single-key-most-common">Single key (most common)</h3>
+<pre><code class="language-csharp">var config = new ConfigurationBuilder()
+    .AddJsonFile(&quot;appsettings.json&quot;)
+    .AddPrivateKeyFromCertificateStore(
+        configKey:     &quot;HelseId:PrivateKey&quot;,
+        thumbprint:    &quot;AABBCCDDEEFF...&quot;,           // from step 2
+        keyUse:        CertificateKeyUse.Signing,   // default
+        storeLocation: StoreLocation.CurrentUser,
+        storeName:     StoreName.My)
+    .Build();
+
+// The key is now available as a PEM string
+string? privateKeyPem = config[&quot;HelseId:PrivateKey&quot;];
+</code></pre>
+<h3 id="multiple-clients">Multiple clients</h3>
+<pre><code class="language-csharp">var config = new ConfigurationBuilder()
+    .AddJsonFile(&quot;appsettings.json&quot;)
+    .AddPrivateKeyFromCertificateStore(source =&gt;
+    {
+        source.Add(&quot;HelseId:PrivateKey&quot;,       &quot;AABB1122...&quot;, CertificateKeyUse.Signing);
+        source.Add(&quot;Maskinporten:PrivateKey&quot;,  &quot;CCDD3344...&quot;, CertificateKeyUse.Signing);
+        source.Add(&quot;Encryption:PrivateKey&quot;,    &quot;EEFF5566...&quot;, CertificateKeyUse.Encryption);
+    })
+    .Build();
+</code></pre>
+<h3 id="with-dependency-injection">With dependency injection</h3>
+<pre><code class="language-csharp">// Program.cs
+builder.Configuration.AddPrivateKeyFromCertificateStore(
+    configKey:  &quot;HelseId:PrivateKey&quot;,
+    thumbprint: builder.Configuration[&quot;HelseId:CertThumbprint&quot;]!);
+
+// Consume in a service
+public class TokenService(IConfiguration config)
+{
+    public void Configure()
+    {
+        var pem = config[&quot;HelseId:PrivateKey&quot;];
+        // load with RSA.ImportFromPem(pem) or IdentityModel
+    }
+}
+</code></pre>
+<h3 id="logging-skipped-certificates">Logging skipped certificates</h3>
+<p>When a certificate cannot be loaded, the entry is silently skipped and the config key is left absent.
+Connect the <code>onValidationError</code> callback to surface the reason through your application logger:</p>
+<pre><code class="language-csharp">// Program.cs — ILogger not yet available, use a deferred approach
+var warnings = new List&lt;CertificateLoadDiagnostic&gt;();
+
+builder.Configuration.AddPrivateKeyFromCertificateStore(
+    configKey:         &quot;HelseId:PrivateKey&quot;,
+    thumbprint:        builder.Configuration[&quot;HelseId:CertThumbprint&quot;]!,
+    onValidationError: warnings.Add);
+
+var app = builder.Build();
+
+// Now ILogger is available — flush any warnings collected during startup
+var logger = app.Services.GetRequiredService&lt;ILogger&lt;Program&gt;&gt;();
+foreach (var d in warnings)
+    logger.LogWarning(&quot;Certificate not loaded [{ConfigKey}] '{Identifier}': {Reason}&quot;,
+        d.ConfigKey, d.Identifier, d.Reason);
+</code></pre>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Config value is <code>null</code>, warning says "not found"</td>
+<td>Thumbprint not found in store</td>
+<td>Check store location (<code>CurrentUser</code> vs <code>LocalMachine</code>) and that the thumbprint is uppercase with no spaces</td>
+</tr>
+<tr>
+<td><code>CryptographicException: The requested operation is not supported</code></td>
+<td>Certificate installed without <code>-Exportable</code></td>
+<td>Reinstall with the <code>-Exportable</code> flag</td>
+</tr>
+<tr>
+<td>Config value is <code>null</code>, warning says "expired"</td>
+<td>Certificate has passed its <code>NotAfter</code> date</td>
+<td>Renew the certificate and reinstall</td>
+</tr>
+<tr>
+<td>Config value is <code>null</code>, warning says "not valid until"</td>
+<td>Certificate <code>NotBefore</code> is in the future</td>
+<td>Check the system clock or the certificate validity period</td>
+</tr>
+<tr>
+<td>Config value is <code>null</code>, warning says "missing required KeyUsage"</td>
+<td>Certificate does not have <code>DigitalSignature</code> (signing) or <code>KeyEncipherment</code> (encryption)</td>
+<td>Generate a new certificate with the correct key usage, or omit the KeyUsage extension for self-signed certs</td>
+</tr>
+<tr>
+<td>Service cannot find certificate (LocalMachine)</td>
+<td>Service account lacks read permission on the private key</td>
+<td>Follow step 3</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../command-overview/" class="btn btn-neutral float-left" title="Cryptography Tool (Jwk)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../commands/generatecertificates/" class="btn btn-neutral float-right" title="Generate keys in certificate format Commands">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../command-overview/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../commands/generatecertificates/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
