@@ -25,7 +25,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                 _fileHandler.CreateDirectory(keyPath);
             }
 
-            var keyPair = JWK.Create(kid: parameters.KeyCustomKid);
+            var keyPair = JWK.Create(parameters.SigningAlgorithm, kid: parameters.KeyCustomKid);
 
             var privateKeyContent = ApplyTransform(keyPair.PrivateKey, parameters.OutputTransform);
             var publicKeyContent = ApplyTransform(keyPair.PublicKey, parameters.OutputTransform);

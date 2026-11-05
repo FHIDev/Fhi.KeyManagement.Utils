@@ -29,6 +29,9 @@ namespace Fhi.Security.Cryptography.Serialization
             if (value.Kty is not null) writer.WriteString("kty", value.Kty);
             if (value.N is not null) writer.WriteString("n", value.N);
             if (value.E is not null) writer.WriteString("e", value.E);
+            if (value.Crv is not null) writer.WriteString("crv", value.Crv);
+            if (value.X is not null) writer.WriteString("x", value.X);
+            if (value.Y is not null) writer.WriteString("y", value.Y);
             if (value.Alg is not null) writer.WriteString("alg", value.Alg);
             if (value.Use is not null) writer.WriteString("use", value.Use);
             if (value.Kid is not null) writer.WriteString("kid", value.Kid);

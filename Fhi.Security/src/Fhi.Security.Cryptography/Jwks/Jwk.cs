@@ -1,7 +1,7 @@
-using Fhi.Security.Cryptography.Serialization;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text.Json;
+using Fhi.Security.Cryptography.Serialization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Fhi.Security.Cryptography.Jwks
 {
@@ -35,60 +35,96 @@ namespace Fhi.Security.Cryptography.Jwks
     /// </summary>
     public static class JWK
     {
+        private static readonly string[] AllowedKeyUses = ["sig", "enc"];
+
+        private static readonly Dictionary<string, string> EcCurvesBySigningAlgorithm = new()
+        {
+            [SecurityAlgorithms.EcdsaSha256] = JsonWebKeyECTypes.P256,
+            [SecurityAlgorithms.EcdsaSha384] = JsonWebKeyECTypes.P384,
+            [SecurityAlgorithms.EcdsaSha512] = JsonWebKeyECTypes.P521,
+        };
+
+        /// <summary>
+        /// Signing algorithms supported by <see cref="Create"/>.
+        /// HelseID rejects RS* from 11 January 2027; RS* is kept for other providers.
+        /// </summary>
+        public static IReadOnlyList<string> SupportedSigningAlgorithms { get; } =
+        [
+            SecurityAlgorithms.RsaSsaPssSha256,
+            SecurityAlgorithms.RsaSsaPssSha384,
+            SecurityAlgorithms.RsaSsaPssSha512,
+            SecurityAlgorithms.EcdsaSha256,
+            SecurityAlgorithms.EcdsaSha384,
+            SecurityAlgorithms.EcdsaSha512,
+            SecurityAlgorithms.RsaSha256,
+            SecurityAlgorithms.RsaSha384,
+            SecurityAlgorithms.RsaSha512,
+        ];
+
         /// <summary>
         /// Create a new JWK key pair.
+        /// Following key requirement https://utviklerportal.nhn.no/informasjonstjenester/helseid/protokoller-og-sikkerhetsprofil/sikkerhetsprofil/docs/vedlegg/krav_til_kryptografi_enmd
         /// </summary>
-        /// <param name="signingAlgorithm">Signing algorithm (default: RSA SHA-512)</param>
+        /// <param name="signingAlgorithm">Signing algorithm, one of <see cref="SupportedSigningAlgorithms"/> (default: PS512)</param>
         /// <param name="keyUse">Key use (default: "sig")</param>
         /// <param name="kid">Optional key ID (default: computed thumbprint)</param>
         /// <returns>A JwkKeyPair containing public and private JWK JSON</returns>
         public static JwkKeyPair Create(
-            string signingAlgorithm = SecurityAlgorithms.RsaSha512,
+            string signingAlgorithm = SecurityAlgorithms.RsaSsaPssSha512,
             string keyUse = "sig",
             string? kid = null)
         {
-            return CreateRsaJwk(signingAlgorithm, keyUse, kid);
+            if (!SupportedSigningAlgorithms.Contains(signingAlgorithm))
+            {
+                throw new ArgumentException($"Invalid signing algorithm: '{signingAlgorithm}'. Expected one of: {string.Join(", ", SupportedSigningAlgorithms)}", nameof(signingAlgorithm));
+            }
+
+            if (!AllowedKeyUses.Contains(keyUse))
+            {
+                throw new ArgumentException($"Invalid key use: '{keyUse}'. Expected one of: {string.Join(", ", AllowedKeyUses)}", nameof(keyUse));
+            }
+
+            var privateJwk = EcCurvesBySigningAlgorithm.TryGetValue(signingAlgorithm, out var curve)
+                ? CreateEcJwk(signingAlgorithm, curve, keyUse)
+                : CreateRsaJwk(signingAlgorithm, keyUse);
+
+            return ToKeyPair(privateJwk, kid);
         }
 
-        /// <summary>
-        /// Generate a Json web key with RSA signing algorithm. Returns both private key and public key 
-        /// Following key requirement https://utviklerportal.nhn.no/informasjonstjenester/helseid/protokoller-og-sikkerhetsprofil/sikkerhetsprofil/docs/vedlegg/krav_til_kryptografi_enmd
-        /// </summary>
-        /// <param name="signingAlgorithm"></param>
-        /// <param name="keyUse"></param>
-        /// <param name="kid"></param>
-        /// <returns></returns>
-        private static JwkKeyPair CreateRsaJwk(
-            string signingAlgorithm,
-            string keyUse,
-            string? kid)
+        private static JsonWebKey CreateEcJwk(string signingAlgorithm, string curve, string keyUse)
         {
-            var allowedAlgorithms = new[]
+            using var ecdsa = ECDsa.Create(ToECCurve(curve));
+            var ecParameters = ecdsa.ExportParameters(true);
+
+            return new JsonWebKey
             {
-                // TODO: add support for multiple algorithms
-                //SecurityAlgorithms.RsaSha256,
-                //SecurityAlgorithms.RsaSha384,
-                SecurityAlgorithms.RsaSha512
+                Alg = signingAlgorithm,
+                Kty = JsonWebAlgorithmsKeyTypes.EllipticCurve,
+                Crv = curve,
+                X = Base64UrlEncoder.Encode(ecParameters.Q.X),
+                Y = Base64UrlEncoder.Encode(ecParameters.Q.Y),
+                D = Base64UrlEncoder.Encode(ecParameters.D),
+                Use = keyUse,
             };
-            if (!allowedAlgorithms.Contains(signingAlgorithm))
-            {
-                throw new ArgumentException($"Invalid signing algorithm: '{signingAlgorithm}'. Expected one of: {string.Join(", ", allowedAlgorithms)}", nameof(signingAlgorithm));
-            }
+        }
 
-            var allowedKeyUses = new[] { "sig", "enc" };
-            if (!allowedKeyUses.Contains(keyUse))
-            {
-                throw new ArgumentException($"Invalid key use: '{keyUse}'. Expected one of: {string.Join(", ", allowedKeyUses)}", nameof(keyUse));
-            }
+        private static ECCurve ToECCurve(string curve) => curve switch
+        {
+            JsonWebKeyECTypes.P256 => ECCurve.NamedCurves.nistP256,
+            JsonWebKeyECTypes.P384 => ECCurve.NamedCurves.nistP384,
+            JsonWebKeyECTypes.P521 => ECCurve.NamedCurves.nistP521,
+            _ => throw new ArgumentOutOfRangeException(nameof(curve), curve, "Unsupported curve")
+        };
 
+        private static JsonWebKey CreateRsaJwk(string signingAlgorithm, string keyUse)
+        {
             using var rsa = RSA.Create(4096);
             var rsaParameters = rsa.ExportParameters(true);
 
-            // Fully qualify JsonWebKey to avoid ambiguity with namespace
-            var privateJwk = new JsonWebKey
+            return new JsonWebKey
             {
                 Alg = signingAlgorithm,
-                Kty = "RSA",
+                Kty = JsonWebAlgorithmsKeyTypes.RSA,
                 N = Base64UrlEncoder.Encode(rsaParameters.Modulus),
                 E = Base64UrlEncoder.Encode(rsaParameters.Exponent),
                 D = Base64UrlEncoder.Encode(rsaParameters.D),
@@ -99,14 +135,16 @@ namespace Fhi.Security.Cryptography.Jwks
                 QI = Base64UrlEncoder.Encode(rsaParameters.InverseQ),
                 Use = keyUse,
             };
+        }
 
+        private static JwkKeyPair ToKeyPair(JsonWebKey privateJwk, string? kid)
+        {
             privateJwk.Kid = string.IsNullOrWhiteSpace(kid)
                 ? Base64UrlEncoder.Encode(privateJwk.ComputeJwkThumbprint())
                 : kid;
 
             var publicOptions = new JsonSerializerOptions
             {
-                // Converter ensures only public key values are added to the public key
                 Converters = { new PublicJsonWebKeyConverter() },
                 WriteIndented = false
             };

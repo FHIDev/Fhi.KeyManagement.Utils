@@ -1,4 +1,5 @@
 ﻿using Fhi.Security.Cryptography.Jwks;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 
@@ -75,6 +76,72 @@ namespace Fhi.Security.Cryptography.UnitTests
             });
 
             Assert.That(ex.Message, Does.Contain("Invalid signing algorithm"), "Wrong or missing exception.");
+        }
+
+        [TestCase(SecurityAlgorithms.RsaSsaPssSha256)]
+        [TestCase(SecurityAlgorithms.RsaSsaPssSha384)]
+        [TestCase(SecurityAlgorithms.RsaSsaPssSha512)]
+        [TestCase(SecurityAlgorithms.RsaSha256)]
+        [TestCase(SecurityAlgorithms.RsaSha384)]
+        [TestCase(SecurityAlgorithms.RsaSha512)]
+        public void GIVEN_Create_WHEN_RsaSigningAlgorithm_THEN_CreateRsaKeyPair(string signingAlgorithm)
+        {
+            var keys = JWK.Create(signingAlgorithm);
+
+            using var publicJwk = JsonDocument.Parse(keys.PublicKey);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(publicJwk.RootElement.GetProperty("kty").GetString(), Is.EqualTo("RSA"));
+                Assert.That(publicJwk.RootElement.GetProperty("alg").GetString(), Is.EqualTo(signingAlgorithm));
+                Assert.That(publicJwk.RootElement.TryGetProperty("n", out _), Is.True);
+                Assert.That(publicJwk.RootElement.TryGetProperty("e", out _), Is.True);
+                Assert.That(publicJwk.RootElement.TryGetProperty("d", out _), Is.False);
+            }
+        }
+
+        [TestCase(SecurityAlgorithms.EcdsaSha256, "P-256")]
+        [TestCase(SecurityAlgorithms.EcdsaSha384, "P-384")]
+        [TestCase(SecurityAlgorithms.EcdsaSha512, "P-521")]
+        public void GIVEN_Create_WHEN_EcSigningAlgorithm_THEN_CreateEcKeyPair(string signingAlgorithm, string expectedCurve)
+        {
+            var keys = JWK.Create(signingAlgorithm);
+
+            using var publicJwk = JsonDocument.Parse(keys.PublicKey);
+            using var privateJwk = JsonDocument.Parse(keys.PrivateKey);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(publicJwk.RootElement.GetProperty("kty").GetString(), Is.EqualTo("EC"));
+                Assert.That(publicJwk.RootElement.GetProperty("alg").GetString(), Is.EqualTo(signingAlgorithm));
+                Assert.That(publicJwk.RootElement.GetProperty("crv").GetString(), Is.EqualTo(expectedCurve));
+                Assert.That(publicJwk.RootElement.TryGetProperty("x", out _), Is.True);
+                Assert.That(publicJwk.RootElement.TryGetProperty("y", out _), Is.True);
+                Assert.That(publicJwk.RootElement.TryGetProperty("d", out _), Is.False);
+                Assert.That(privateJwk.RootElement.TryGetProperty("d", out _), Is.True);
+            }
+        }
+
+        [TestCaseSource(typeof(JWK), nameof(JWK.SupportedSigningAlgorithms))]
+        public async Task GIVEN_Create_WHEN_SigningTokenWithPrivateKey_THEN_PublicKeyValidatesToken(string signingAlgorithm)
+        {
+            var keys = JWK.Create(signingAlgorithm);
+            var handler = new JsonWebTokenHandler();
+
+            var token = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = "issuer",
+                SigningCredentials = new SigningCredentials(new Microsoft.IdentityModel.Tokens.JsonWebKey(keys.PrivateKey), signingAlgorithm)
+            });
+
+            var result = await handler.ValidateTokenAsync(token, new TokenValidationParameters
+            {
+                ValidIssuer = "issuer",
+                ValidateAudience = false,
+                IssuerSigningKey = new Microsoft.IdentityModel.Tokens.JsonWebKey(keys.PublicKey)
+            });
+
+            Assert.That(result.IsValid, Is.True, result.Exception?.Message);
         }
     }
 }

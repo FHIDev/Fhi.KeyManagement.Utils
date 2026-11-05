@@ -50,11 +50,19 @@ Console.WriteLine("Private JWK: " + jwkPair.PrivateKey);
 
 ```csharp
 var jwkPair = JWK.Create(
-    signingAlgorithm: Microsoft.IdentityModel.Tokens.SecurityAlgorithms.RsaSha512,
+    signingAlgorithm: Microsoft.IdentityModel.Tokens.SecurityAlgorithms.EcdsaSha256,
     keyUse: "sig",
     kid: "custom-key-id"
 );
 ```
+
+Supported signing algorithms (`JWK.SupportedSigningAlgorithms`), default `PS512`:
+
+| Algorithm | Key |
+|-----------|-----|
+| `PS256`, `PS384`, `PS512` | RSA 4096 |
+| `ES256`, `ES384`, `ES512` | EC P-256, P-384, P-521 |
+| `RS256`, `RS384`, `RS512` | RSA 4096 — rejected by HelseID from 11 January 2027 |
 
 ---
 
@@ -64,7 +72,6 @@ var jwkPair = JWK.Create(
 |----------------|-------------|
 | `JwkKeyPair`   | Record holding `PublicKey` and `PrivateKey` JSON strings. |
 | `JWK.Create()` | Generates a new JWK key pair with optional parameters. |
-| `JsonWebKeyGenerator` | Internal helper for RSA JWK generation. |
 | `PublicJsonWebKeyConverter` | Custom converter ensuring only public JWK fields are serialized. |
 
 ---
