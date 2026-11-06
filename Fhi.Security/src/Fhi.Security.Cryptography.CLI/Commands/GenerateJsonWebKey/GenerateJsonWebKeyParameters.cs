@@ -1,4 +1,5 @@
 using Fhi.Security.Cryptography.Jwks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 {
@@ -16,6 +17,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public static readonly GenerateJsonWebKeyOptionNames KeyDirectory = new("KeyDirectory", "d");
         public static readonly GenerateJsonWebKeyOptionNames KeyCustomKid = new("KeyCustomKid", "k");
         public static readonly GenerateJsonWebKeyOptionNames OutputTransform = new("OutputTransform", "ot");
+        public static readonly GenerateJsonWebKeyOptionNames SigningAlgorithm = new("SigningAlgorithm", "a");
     }
 
     /// <summary>
@@ -42,5 +44,10 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         /// Output transform: JsonEscape (default) or Base64 for base64-encoded content
         /// </summary>
         public OutputTransformType OutputTransform { get; set; } = OutputTransformType.JsonEscape;
+
+        /// <summary>
+        /// Signing algorithm, one of <see cref="JWK.SupportedSigningAlgorithms"/>
+        /// </summary>
+        public string SigningAlgorithm { get; set; } = SecurityAlgorithms.RsaSsaPssSha512;
     };
 }

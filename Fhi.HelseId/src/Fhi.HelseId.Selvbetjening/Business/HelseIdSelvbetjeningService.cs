@@ -139,7 +139,7 @@ namespace Fhi.HelseIdSelvbetjening.Business
 
         private static string CreateDPoPKey()
         {
-            var key = JWK.Create();
+            var key = JWK.Create(SecurityAlgorithms.RsaSsaPssSha256);
             return key.PrivateKey;
         }
 

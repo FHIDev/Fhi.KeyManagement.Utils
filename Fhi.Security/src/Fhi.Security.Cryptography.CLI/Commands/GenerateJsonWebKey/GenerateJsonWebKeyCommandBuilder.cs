@@ -2,6 +2,7 @@ using System.CommandLine;
 using Fhi.Security.Cryptography.CLI.Commands.Extensions;
 using Fhi.Security.Cryptography.Jwks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 {
@@ -45,6 +46,14 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                 OutputTransformType.JsonEscape.ToCamelCase(),
                 OutputTransformType.Base64.ToCamelCase());
 
+            var signingAlgorithmOption = generateJsonWebKeyCommand.CreateStringOption(
+                GenerateJsonWebKeyParameterNames.SigningAlgorithm.Long,
+                GenerateJsonWebKeyParameterNames.SigningAlgorithm.Short,
+                $"Signing algorithm (default: {SecurityAlgorithms.RsaSsaPssSha512}). One of: {string.Join(", ", JWK.SupportedSigningAlgorithms)}",
+                isRequired: false);
+            signingAlgorithmOption.AcceptOnlyFromAmong([.. JWK.SupportedSigningAlgorithms]);
+            signingAlgorithmOption.DefaultValueFactory = _ => SecurityAlgorithms.RsaSsaPssSha512;
+
             generateJsonWebKeyCommand.SetAction((ParseResult parseResult) =>
             {
                 var keyFileNamePrefix = parseResult.GetValue(keyFileNamePrefixOption);
@@ -61,7 +70,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                     KeyFileNamePrefix = keyFileNamePrefix!,
                     KeyDirectory = keyDirectory,
                     KeyCustomKid = keyCustomKid,
-                    OutputTransform = outputTransform
+                    OutputTransform = outputTransform,
+                    SigningAlgorithm = parseResult.GetValue(signingAlgorithmOption)!
                 };
 
                 _commandHandler.Execute(parameters);

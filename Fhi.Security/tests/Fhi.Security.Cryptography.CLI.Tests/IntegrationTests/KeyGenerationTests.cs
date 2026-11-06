@@ -261,6 +261,72 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
             }
         }
 
+        [TestCase("--SigningAlgorithm", "ES256", "EC")]
+        [TestCase("-a", "ES512", "EC")]
+        [TestCase("-a", "PS256", "RSA")]
+        [TestCase("", "", "RSA")] // default PS512
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_SigningAlgorithm_THEN_GenerateKeyOfMatchingType(string algorithmOption, string algorithm, string expectedKty)
+        {
+            var fileHandlerMock = new FileHandlerMock();
+            var prefixName = "algorithm_test";
+            var directoryPath = "c:\\temp";
+            var expectedAlg = string.IsNullOrEmpty(algorithm) ? "PS512" : algorithm;
+
+            var args = new List<string>
+            {
+                GenerateJsonWebKeyParameterNames.CommandName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", prefixName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyDirectory.Long}", directoryPath,
+                $"--{GenerateJsonWebKeyParameterNames.OutputTransform.Long}", OutputTransformType.Base64.ToCamelCase()
+            };
+
+            if (!string.IsNullOrWhiteSpace(algorithmOption))
+            {
+                args.Add(algorithmOption);
+                args.Add(algorithm);
+            }
+
+            var rootCommandBuilder = new RootCommandBuilder()
+                .WithArgs(args.ToArray())
+                .WithFileHandler(fileHandlerMock)
+                .WithLoggerProvider(new FakeLoggerProvider(), LogLevel.Trace);
+
+            var rootCommand = rootCommandBuilder.Build();
+            var parseResult = rootCommand.Parse(rootCommandBuilder.Args);
+
+            var exitCode = await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
+
+            var publicKeyBase64 = fileHandlerMock.Files[Path.Combine(directoryPath, $"{prefixName}_public.txt")];
+            using var publicKeyDoc = JsonDocument.Parse(Encoding.UTF8.GetString(Convert.FromBase64String(publicKeyBase64)));
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(publicKeyDoc.RootElement.GetProperty("kty").GetString(), Is.EqualTo(expectedKty));
+                Assert.That(publicKeyDoc.RootElement.GetProperty("alg").GetString(), Is.EqualTo(expectedAlg));
+            }
+        }
+
+        [Test]
+        public void GIVEN_GenerateJsonWebKeys_WHEN_UnsupportedSigningAlgorithm_THEN_ParseError()
+        {
+            var args = new[]
+            {
+                GenerateJsonWebKeyParameterNames.CommandName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", "algorithm_test",
+                $"-{GenerateJsonWebKeyParameterNames.SigningAlgorithm.Short}", "none"
+            };
+
+            var rootCommandBuilder = new RootCommandBuilder()
+                .WithArgs(args)
+                .WithFileHandler(new FileHandlerMock())
+                .WithLoggerProvider(new FakeLoggerProvider(), LogLevel.Trace);
+
+            var parseResult = rootCommandBuilder.Build().Parse(rootCommandBuilder.Args);
+
+            Assert.That(parseResult.Errors, Is.Not.Empty);
+        }
+
         private static void AssertValidJwkKeyPair(JsonDocument privateKey, JsonDocument publicKey)
         {
             Assert.That(privateKey.RootElement.TryGetProperty("kty", out _), Is.True);
