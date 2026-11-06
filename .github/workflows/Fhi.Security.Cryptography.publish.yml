@@ -57,7 +57,7 @@ jobs:
       id: nuget-login
       uses: NuGet/login@v1
       with:
-        user: FhiDev
+        user: TuvaK
 
     - name: Publish NuGet package
       run: |
