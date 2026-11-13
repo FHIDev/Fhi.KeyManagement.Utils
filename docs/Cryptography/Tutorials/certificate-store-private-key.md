@@ -19,7 +19,7 @@ Typical use cases:
 
 ## Step 1 — Generate a certificate
 
-Use `Fhi.Security.Cryptography.CLI` to generate a self-signed certificate. See [](../commands/generatecertificates.ipynb)
+Use `Fhi.Security.Cryptography.CLI` to generate a self-signed certificate. See [certificate generation](../commands/generatecertificates.md)
 
 This produces two files:
 

@@ -7,8 +7,8 @@ Currently, it provides functionality for generating **JSON Web Keys (JWKs)** wit
 
 ## Features
 
-- Generate RSA-based JWK key pairs (public and private).
-- TODO: Supports configurable signing algorithms (default: `RSA SHA-512`).
+- Generate RSA and EC JWK key pairs (public and private).
+- Supports configurable signing algorithms (default: `PS512`).
 - Supports key usages (`sig`, `enc`).
 - Automatic `kid` (Key ID) generation via JWK thumbprint or optional custom kid value.
 - Public/Private JWK separation with custom serialization.
@@ -36,7 +36,7 @@ Or reference it in your `.csproj`:
 ### Generate a JWK Key Pair
 
 ```csharp
-using Fhi.Security.Cryptography;
+using Fhi.Security.Cryptography.Jwks;
 
 // Create a new JWK key pair
 var jwkPair = JWK.Create();
@@ -79,7 +79,7 @@ Supported signing algorithms (`JWK.SupportedSigningAlgorithms`), default `PS512`
 ## Contributing
 
 Contributions are welcome!  
-Please fsee the repository guide for contributions.
+Please see the repository guide for contributions.
 
 ---
 

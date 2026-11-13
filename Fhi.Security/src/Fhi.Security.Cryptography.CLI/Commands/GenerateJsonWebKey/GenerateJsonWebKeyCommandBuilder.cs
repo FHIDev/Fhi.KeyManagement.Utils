@@ -40,11 +40,23 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
             var outputTransformOption = generateJsonWebKeyCommand.CreateStringOption(
                 GenerateJsonWebKeyParameterNames.OutputTransform.Long,
                 GenerateJsonWebKeyParameterNames.OutputTransform.Short,
-                $"Output transform: '{OutputTransformType.JsonEscape.ToCamelCase()}' (default) or '{OutputTransformType.Base64.ToCamelCase()}' for base64-encoded content",
+                $"Output transform for both keys: '{OutputTransformType.JsonEscape.ToCamelCase()}' (default), '{OutputTransformType.Base64.ToCamelCase()}' for base64-encoded content or '{OutputTransformType.None.ToCamelCase()}' for raw JSON",
                 isRequired: false);
-            outputTransformOption.AcceptOnlyFromAmong(
-                OutputTransformType.JsonEscape.ToCamelCase(),
-                OutputTransformType.Base64.ToCamelCase());
+            outputTransformOption.AcceptOnlyFromAmong(AllowedOutputTransforms);
+
+            var privateKeyOutputTransformOption = generateJsonWebKeyCommand.CreateStringOption(
+                GenerateJsonWebKeyParameterNames.PrivateKeyOutputTransform.Long,
+                GenerateJsonWebKeyParameterNames.PrivateKeyOutputTransform.Short,
+                $"Output transform for the private key. Overrides --{GenerateJsonWebKeyParameterNames.OutputTransform.Long}",
+                isRequired: false);
+            privateKeyOutputTransformOption.AcceptOnlyFromAmong(AllowedOutputTransforms);
+
+            var publicKeyOutputTransformOption = generateJsonWebKeyCommand.CreateStringOption(
+                GenerateJsonWebKeyParameterNames.PublicKeyOutputTransform.Long,
+                GenerateJsonWebKeyParameterNames.PublicKeyOutputTransform.Short,
+                $"Output transform for the public key. Overrides --{GenerateJsonWebKeyParameterNames.OutputTransform.Long}",
+                isRequired: false);
+            publicKeyOutputTransformOption.AcceptOnlyFromAmong(AllowedOutputTransforms);
 
             var signingAlgorithmOption = generateJsonWebKeyCommand.CreateStringOption(
                 GenerateJsonWebKeyParameterNames.SigningAlgorithm.Long,
@@ -59,10 +71,9 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                 var keyFileNamePrefix = parseResult.GetValue(keyFileNamePrefixOption);
                 var keyDirectory = parseResult.GetValue(keyDirectoryOption);
                 var keyCustomKid = parseResult.GetValue(keyCustomKidOption);
-                var outputTransformString = parseResult.GetValue(outputTransformOption);
-                var outputTransform = string.IsNullOrEmpty(outputTransformString)
-                    ? OutputTransformType.JsonEscape
-                    : Enum.Parse<OutputTransformType>(outputTransformString, ignoreCase: true);
+                var outputTransform = ParseOutputTransform(parseResult.GetValue(outputTransformOption)) ?? OutputTransformType.JsonEscape;
+                var privateKeyOutputTransform = ParseOutputTransform(parseResult.GetValue(privateKeyOutputTransformOption)) ?? outputTransform;
+                var publicKeyOutputTransform = ParseOutputTransform(parseResult.GetValue(publicKeyOutputTransformOption)) ?? outputTransform;
 
                 var parameters = new GenerateJsonWebKeyParameters
                 {
@@ -70,7 +81,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
                     KeyFileNamePrefix = keyFileNamePrefix!,
                     KeyDirectory = keyDirectory,
                     KeyCustomKid = keyCustomKid,
-                    OutputTransform = outputTransform,
+                    PrivateKeyOutputTransform = privateKeyOutputTransform,
+                    PublicKeyOutputTransform = publicKeyOutputTransform,
                     SigningAlgorithm = parseResult.GetValue(signingAlgorithmOption)!
                 };
 
@@ -80,5 +92,11 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 
             return generateJsonWebKeyCommand;
         }
+
+        private static readonly string[] AllowedOutputTransforms =
+            [.. Enum.GetValues<OutputTransformType>().Select(type => type.ToCamelCase())];
+
+        private static OutputTransformType? ParseOutputTransform(string? value) =>
+            string.IsNullOrEmpty(value) ? null : Enum.Parse<OutputTransformType>(value, ignoreCase: true);
     }
 }
