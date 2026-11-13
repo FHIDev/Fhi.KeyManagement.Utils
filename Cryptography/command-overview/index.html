@@ -62,7 +62,7 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" >Commands</a>
     <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../commands/generatecertificates/">Generate keys in certificate format Commands</a>
+                <li class="toctree-l2"><a class="reference internal" href="../commands/generatecertificates/">Generate keys in certificate format Command</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../commands/generatenewjsonwebkeys/">Generate new Json Web keys Command</a>
                 </li>
@@ -117,6 +117,9 @@
 </ul>
 <h3 id="prerequisites">Prerequisites</h3>
 <p>.NET SDK version 9.x or 10.x is required to install and use the Fhi.Cryptography tool.</p>
+<p>To run the tool without installing it, use <code>dnx</code> (requires .NET SDK 10.x):</p>
+<pre><code class="language-powershell">dnx Fhi.Security.Cryptography.CLI --yes generatejsonwebkey -n helsedata --OutputTransform base64
+</code></pre>
               
             </div>
           </div><footer>
