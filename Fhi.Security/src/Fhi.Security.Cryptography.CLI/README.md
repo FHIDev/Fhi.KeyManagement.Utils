@@ -15,7 +15,8 @@ See further documentation in the official [wiki](https://fhidev.github.io/Fhi.Ke
 
 ## Features
 
-- Generate RSA-based JWK key pairs (public and private).
+- Generate RSA and EC JWK key pairs (public and private).
+- Supports configurable signing algorithms (default: `PS512`).
 - Automatic `kid` (Key ID) generation via JWK thumbprint or optional custom kid value.
 - Public/Private JWK separation with custom serialization.
 
@@ -29,6 +30,12 @@ Add the package via NuGet:
 dotnet tool install --global Fhi.Security.Cryptography.CLI --version x.y.x
 ```
 
+Or run it without installing, using `dnx` (requires .NET SDK 10.x):
+
+```bash
+dnx Fhi.Security.Cryptography.CLI --yes generatejsonwebkey -n helsedata --OutputTransform base64
+```
+
 ---
 
 ## Usage
@@ -40,7 +47,7 @@ See further documentation about usage in the official [wiki](https://fhidev.gith
 ## Contributing
 
 Contributions are welcome!  
-Please fsee the repository guide for contributions.
+Please see the repository guide for contributions.
 
 ---
 
