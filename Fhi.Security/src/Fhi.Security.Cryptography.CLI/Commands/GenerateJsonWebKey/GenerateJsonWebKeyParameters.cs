@@ -17,6 +17,8 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public static readonly GenerateJsonWebKeyOptionNames KeyDirectory = new("KeyDirectory", "d");
         public static readonly GenerateJsonWebKeyOptionNames KeyCustomKid = new("KeyCustomKid", "k");
         public static readonly GenerateJsonWebKeyOptionNames OutputTransform = new("OutputTransform", "ot");
+        public static readonly GenerateJsonWebKeyOptionNames PrivateKeyOutputTransform = new("PrivateKeyOutputTransform", "pot");
+        public static readonly GenerateJsonWebKeyOptionNames PublicKeyOutputTransform = new("PublicKeyOutputTransform", "put");
         public static readonly GenerateJsonWebKeyOptionNames SigningAlgorithm = new("SigningAlgorithm", "a");
     }
 
@@ -41,9 +43,14 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         public string? KeyCustomKid { get; set; }
 
         /// <summary>
-        /// Output transform: JsonEscape (default) or Base64 for base64-encoded content
+        /// Output transform for the private key: JsonEscape (default), Base64 or None
         /// </summary>
-        public OutputTransformType OutputTransform { get; set; } = OutputTransformType.JsonEscape;
+        public OutputTransformType PrivateKeyOutputTransform { get; set; } = OutputTransformType.JsonEscape;
+
+        /// <summary>
+        /// Output transform for the public key: JsonEscape (default), Base64 or None
+        /// </summary>
+        public OutputTransformType PublicKeyOutputTransform { get; set; } = OutputTransformType.JsonEscape;
 
         /// <summary>
         /// Signing algorithm, one of <see cref="JWK.SupportedSigningAlgorithms"/>

@@ -327,6 +327,120 @@ namespace Fhi.Security.Cryptography.CLI.IntegrationTests
             Assert.That(parseResult.Errors, Is.Not.Empty);
         }
 
+        [TestCase("--OutputTransform")]
+        [TestCase("-ot")]
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_NoneOutputTransform_THEN_OutputRawJson(string transformOption)
+        {
+            var fileHandlerMock = new FileHandlerMock();
+            var prefixName = "none_test";
+            var directoryPath = "c:\\temp";
+
+            var exitCode = await InvokeGenerateJsonWebKey(fileHandlerMock, prefixName, directoryPath,
+                transformOption, OutputTransformType.None.ToCamelCase());
+
+            var privateKey = fileHandlerMock.Files[Path.Combine(directoryPath, $"{prefixName}_private.json")];
+            var publicKey = fileHandlerMock.Files[Path.Combine(directoryPath, $"{prefixName}_public.json")];
+            using var privateKeyDoc = JsonDocument.Parse(privateKey);
+            using var publicKeyDoc = JsonDocument.Parse(publicKey);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(privateKey, Does.StartWith("{"));
+                Assert.That(publicKey, Does.StartWith("{"));
+                AssertValidJwkKeyPair(privateKeyDoc, publicKeyDoc);
+            }
+        }
+
+        [Test]
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_PublicKeyOutputTransformOverridesShared_THEN_OutputDifferentTransformPerKey()
+        {
+            var fileHandlerMock = new FileHandlerMock();
+            var prefixName = "per_key_test";
+            var directoryPath = "c:\\temp";
+
+            var exitCode = await InvokeGenerateJsonWebKey(fileHandlerMock, prefixName, directoryPath,
+                $"-{GenerateJsonWebKeyParameterNames.OutputTransform.Short}", OutputTransformType.Base64.ToCamelCase(),
+                $"-{GenerateJsonWebKeyParameterNames.PublicKeyOutputTransform.Short}", OutputTransformType.None.ToCamelCase());
+
+            var privateKeyBase64 = fileHandlerMock.Files[Path.Combine(directoryPath, $"{prefixName}_private.txt")];
+            var publicKey = fileHandlerMock.Files[Path.Combine(directoryPath, $"{prefixName}_public.json")];
+            using var privateKeyDoc = JsonDocument.Parse(Encoding.UTF8.GetString(Convert.FromBase64String(privateKeyBase64)));
+            using var publicKeyDoc = JsonDocument.Parse(publicKey);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(fileHandlerMock.Files, Has.Count.EqualTo(2));
+                AssertValidJwkKeyPair(privateKeyDoc, publicKeyDoc);
+            }
+        }
+
+        [Test]
+        public async Task GIVEN_GenerateJsonWebKeys_WHEN_OnlyPerKeyOutputTransforms_THEN_OutputDifferentTransformPerKey()
+        {
+            var fileHandlerMock = new FileHandlerMock();
+            var prefixName = "per_key_only_test";
+            var directoryPath = "c:\\temp";
+
+            var exitCode = await InvokeGenerateJsonWebKey(fileHandlerMock, prefixName, directoryPath,
+                $"--{GenerateJsonWebKeyParameterNames.PrivateKeyOutputTransform.Long}", OutputTransformType.JsonEscape.ToCamelCase(),
+                $"--{GenerateJsonWebKeyParameterNames.PublicKeyOutputTransform.Long}", OutputTransformType.None.ToCamelCase());
+
+            var privateKeyEscaped = fileHandlerMock.Files[Path.Combine(directoryPath, $"{prefixName}_private.json")];
+            var publicKey = fileHandlerMock.Files[Path.Combine(directoryPath, $"{prefixName}_public.json")];
+            using var privateKeyDoc = JsonDocument.Parse(JsonSerializer.Deserialize<string>(privateKeyEscaped)!);
+            using var publicKeyDoc = JsonDocument.Parse(publicKey);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(exitCode, Is.Zero);
+                Assert.That(privateKeyEscaped, Does.StartWith("\""));
+                Assert.That(publicKey, Does.StartWith("{"));
+                AssertValidJwkKeyPair(privateKeyDoc, publicKeyDoc);
+            }
+        }
+
+        [TestCase("-pot")]
+        [TestCase("-put")]
+        public void GIVEN_GenerateJsonWebKeys_WHEN_UnsupportedPerKeyOutputTransform_THEN_ParseError(string transformOption)
+        {
+            var args = new[]
+            {
+                GenerateJsonWebKeyParameterNames.CommandName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", "invalid_transform_test",
+                transformOption, "hex"
+            };
+
+            var rootCommandBuilder = new RootCommandBuilder()
+                .WithArgs(args)
+                .WithFileHandler(new FileHandlerMock())
+                .WithLoggerProvider(new FakeLoggerProvider(), LogLevel.Trace);
+
+            var parseResult = rootCommandBuilder.Build().Parse(rootCommandBuilder.Args);
+
+            Assert.That(parseResult.Errors, Is.Not.Empty);
+        }
+
+        private static async Task<int> InvokeGenerateJsonWebKey(FileHandlerMock fileHandlerMock, string prefixName, string directoryPath, params string[] extraArgs)
+        {
+            string[] args =
+            [
+                GenerateJsonWebKeyParameterNames.CommandName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyFileNamePrefix.Long}", prefixName,
+                $"--{GenerateJsonWebKeyParameterNames.KeyDirectory.Long}", directoryPath,
+                .. extraArgs
+            ];
+
+            var rootCommandBuilder = new RootCommandBuilder()
+                .WithArgs(args)
+                .WithFileHandler(fileHandlerMock)
+                .WithLoggerProvider(new FakeLoggerProvider(), LogLevel.Trace);
+
+            var parseResult = rootCommandBuilder.Build().Parse(rootCommandBuilder.Args);
+            return await CommandLineBuilder.CommandLineBuilderInvokerAsync(parseResult);
+        }
+
         private static void AssertValidJwkKeyPair(JsonDocument privateKey, JsonDocument publicKey)
         {
             Assert.That(privateKey.RootElement.TryGetProperty("kty", out _), Is.True);

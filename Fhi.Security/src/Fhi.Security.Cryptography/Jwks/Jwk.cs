@@ -17,8 +17,10 @@ namespace Fhi.Security.Cryptography.Jwks
     /// </summary>
     public enum OutputTransformType
     {
+        Unknown,
         JsonEscape,
-        Base64
+        Base64,
+        None
     }
 
     public static class OutputTransformTypeExtensions

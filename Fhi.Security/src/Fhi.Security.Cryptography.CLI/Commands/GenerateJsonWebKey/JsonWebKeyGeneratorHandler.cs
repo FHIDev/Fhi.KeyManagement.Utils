@@ -14,7 +14,7 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
         /// <summary>
         /// Generates private and public key.
         /// Stores in executing directory if path not specified.
-        /// File extension is .json for jsonEscape transform, .txt for base64 transform.
+        /// File extension per key is .txt for base64 transform, otherwise .json.
         /// </summary>
         public void Execute(GenerateJsonWebKeyParameters parameters)
         {
@@ -27,12 +27,11 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
 
             var keyPair = JWK.Create(parameters.SigningAlgorithm, kid: parameters.KeyCustomKid);
 
-            var privateKeyContent = ApplyTransform(keyPair.PrivateKey, parameters.OutputTransform);
-            var publicKeyContent = ApplyTransform(keyPair.PublicKey, parameters.OutputTransform);
+            var privateKeyContent = ApplyTransform(keyPair.PrivateKey, parameters.PrivateKeyOutputTransform);
+            var publicKeyContent = ApplyTransform(keyPair.PublicKey, parameters.PublicKeyOutputTransform);
 
-            var fileExtension = parameters.OutputTransform == OutputTransformType.Base64 ? "txt" : "json";
-            var privateKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_private.{fileExtension}");
-            var publicKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_public.{fileExtension}");
+            var privateKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_private.{GetFileExtension(parameters.PrivateKeyOutputTransform)}");
+            var publicKeyPath = Path.Combine(keyPath, $"{parameters.KeyFileNamePrefix}_public.{GetFileExtension(parameters.PublicKeyOutputTransform)}");
 
             _fileHandler.WriteAllText(privateKeyPath, privateKeyContent);
             _fileHandler.WriteAllText(publicKeyPath, publicKeyContent);
@@ -47,8 +46,12 @@ namespace Fhi.Security.Cryptography.CLI.Commands.GenerateJsonWebKey
             {
                 OutputTransformType.Base64 => Convert.ToBase64String(Encoding.UTF8.GetBytes(content)),
                 OutputTransformType.JsonEscape => JsonSerializer.Serialize(content),
+                OutputTransformType.None => content,
                 _ => throw new ArgumentOutOfRangeException(nameof(transform), transform, "Unknown output transform")
             };
         }
+
+        private static string GetFileExtension(OutputTransformType transform) =>
+            transform == OutputTransformType.Base64 ? "txt" : "json";
     }
 }
